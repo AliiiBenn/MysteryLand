@@ -142,3 +142,4 @@ class MapManager:
         
         for npc in self.get_map().npcs:
             npc.move()
+            # test
