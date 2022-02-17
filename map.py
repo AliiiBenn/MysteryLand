@@ -77,32 +77,39 @@ class MapManager:
         # charger la carte (tmx)
         tmx_data = pytmx.util_pygame.load_pygame(f'Maps/{name}.tmx')
         map_data = pyscroll.data.TiledMapData(tmx_data)
-        map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = 2.5
+        self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
+        self.change_zoom(self.screen.get_width(), self.screen.get_height())
         
         
         
         # definir une liste qui va stocker les rectangles de collisions
         walls = []
+        AnimatedTile = []
         
         for obj in tmx_data.objects:
+            print(obj.x, obj.y, obj.width, obj.height, obj.name, obj.type)
             if obj.type == "collisions":
                 walls.append(py.Rect(obj.x, obj.y, obj.width, obj.height))
-            elif obj.type == "b":
-                # py.draw.rect(self.screen, (0, 0, 255), (obj.x, obj.y, obj.width, obj.height))
-                self.butterfly = TiledEntity(obj.x, obj.y, "animated_butterfly_2_32x32", obj.width, obj.height, 4, 5)
+            elif obj.type == "test":
+                AnimatedTile.append(TiledEntity(obj.x, obj.y, obj.name, obj.width, obj.height, 4, 5))
                 
         
         # dessiner le groupe de calque
-        group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=6)
+        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=6)
+        for b in AnimatedTile:
+            group.add(b)
         group.add(self.player)
-        group.add(self.butterfly)
+        
         
         for npc in npcs:
             group.add(npc)
         
         # creer un objet map
         self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs)
+        
+    def change_zoom(self, width, height):
+        self.map_layer.zoom = 5.6 - ((width + height) / 720)
+        return self.map_layer
         
     def get_map(self):
         return self.maps[self.current_map]
@@ -142,4 +149,3 @@ class MapManager:
         
         for npc in self.get_map().npcs:
             npc.move()
-            # test

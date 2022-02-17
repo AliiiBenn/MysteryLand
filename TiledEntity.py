@@ -16,6 +16,7 @@ class TiledEntity(py.sprite.Sprite):
         self.clock = 0
         self.image = self.images[self.animation_index]
         self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)
         
     def update(self):
         """
@@ -31,7 +32,7 @@ class TiledEntity(py.sprite.Sprite):
         images_list = []
         
         for position in range(self.tile_number):
-            x = position * 32
+            x = position * 16
             images_list.append(self.get_image(x, y))
             
         return images_list
@@ -42,7 +43,7 @@ class TiledEntity(py.sprite.Sprite):
         Méthode utilisée pour charger une image et la retourner
         """
         image = py.Surface([self.width, self.height])
-        image.blit(self.sprite, (0, 0), (x, y, 32, 32))
+        image.blit(self.sprite, (0, 0), (x, y, 16, 16))
         return image
     
     def animate(self):
@@ -58,5 +59,7 @@ class TiledEntity(py.sprite.Sprite):
             if self.animation_index >= self.tile_number:
                 self.animation_index = 0
             
+            
             self.image = self.images[self.animation_index]
             self.image.set_colorkey([0, 0, 0])
+            

@@ -70,6 +70,9 @@ class Game:
                     self.player.change_player_position()
                     self.player.change_player_life(self.player.life)
                     running = False
+                elif event.type == py.VIDEORESIZE:
+                    self.screen = py.display.set_mode(event.size, py.RESIZABLE)
+                    self.map_manager.change_zoom(event.size[0], event.size[1])
 
             
 
