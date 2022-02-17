@@ -33,9 +33,8 @@ class Menu:
     
     def creer(self, screen, color):
         screen.fill(color)
-        liste_boutons = ['play', 'option', 'exit']
-        for index, bouton in enumerate(liste_boutons):
-            bouton = Button (screen.get_width() / 2, (index + 1) * 150, 180, 88, f'{bouton}_button')
+        for index, bouton in enumerate(['play', 'option', 'exit']):
+            bouton = Button (screen.get_width() / 2, screen.get_height() / 2 + ((index - 1) * 150), 180, 88, f'{bouton}_button')
             self.boutons.append(bouton)
             bouton.creer(screen)
             
