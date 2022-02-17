@@ -1,14 +1,12 @@
 import pygame as py
-import pytmx, pyscroll
 from player import Player
-from TiledEntity import TiledEntity
 from json_management import JsonManagement as JM
 from map import MapManager
+from menu import Menu
 
 # test
 CLOCK = py.time.Clock()
 FPS = 60
-ZOOM = 2.5
 
 class Game:
     def __init__(self):
@@ -21,6 +19,8 @@ class Game:
 
         self.player = Player(0, 0, 100)
         self.map_manager = MapManager(self.screen, self.player)
+        
+        self.playing = False
         
         
     def update(self):
@@ -55,20 +55,31 @@ class Game:
         while running:
             CLOCK.tick(FPS)
             
-            self.player.save_location()
-            self.handle_input()
-            self.update()
-            self.map_manager.draw()
             
-            if self.player.is_player_dead():
-                self.player.change_player_life(100)
-                running = False
+            if self.playing:
+                self.player.save_location()
+                self.handle_input()
+                self.update()
+                self.map_manager.draw()
+                
+                if self.player.is_player_dead():
+                    self.player.change_player_life(100)
+                    running = False
+                    
+            else:
+                menu = Menu()
+                menu.creer(self.screen, (0, 0, 255))
+                self.playing = menu.check_state('play')
+                
+                if menu.check_state('exit'):
+                    running = False
                 
             py.display.flip()
             for event in py.event.get():
                 if event.type == py.QUIT:
-                    self.player.change_player_position()
-                    self.player.change_player_life(self.player.life)
+                    if self.playing:
+                        self.player.change_player_position()
+                        self.player.change_player_life(self.player.life)
                     running = False
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)

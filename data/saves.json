@@ -1,10 +1,10 @@
 {
     "player": {
         "position": [
-            400,
-            480
+            6412,
+            6576
         ],
         "life": 100,
-        "current_world": "Lobby"
+        "current_world": "World"
     }
 }
