@@ -1,0 +1,10 @@
+{
+    "player": {
+        "position": [
+            400,
+            480
+        ],
+        "life": 100,
+        "current_world": "Lobby"
+    }
+}
