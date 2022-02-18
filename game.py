@@ -90,7 +90,9 @@ class Game:
                 
             if self.option_open:
                 menu.creer_menu_options()
-                
+            
+            if menu.quit_option:
+                self.option_open = False   
             
             self.handle_input()
             py.display.flip()

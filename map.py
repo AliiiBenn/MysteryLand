@@ -86,6 +86,8 @@ class MapManager:
         walls = []
         AnimatedTile = []
         
+        
+        
         for obj in tmx_data.objects:
             print(obj.x, obj.y, obj.width, obj.height, obj.name, obj.type)
             if obj.type == "collisions":
