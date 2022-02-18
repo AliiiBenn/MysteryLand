@@ -1,8 +1,8 @@
 {
     "player": {
         "position": [
-            6412,
-            6576
+            6580,
+            6564
         ],
         "life": 100,
         "current_world": "World"

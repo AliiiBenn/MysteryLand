@@ -21,6 +21,8 @@ class Game:
         self.map_manager = MapManager(self.screen, self.player)
         
         self.playing = False
+        self.open_menu = False
+        self.option_open = False
         
         
     def update(self):
@@ -29,26 +31,31 @@ class Game:
     def handle_input(self):
         pressed = py.key.get_pressed()
         
-        if pressed[py.K_z]:
-            if pressed[py.K_q]:
+        if self.playing:
+            if pressed[py.K_z]:
+                if pressed[py.K_q]:
+                    self.player.move_left()
+                elif pressed[py.K_d]:
+                    self.player.move_right()
+                self.player.move_up()
+            elif pressed[py.K_s]:
+                if pressed[py.K_q]:
+                    self.player.move_left()
+                elif pressed[py.K_d]:
+                    self.player.move_right()
+                self.player.move_down()
+            elif pressed[py.K_q]:
                 self.player.move_left()
             elif pressed[py.K_d]:
                 self.player.move_right()
-            self.player.move_up()
-        elif pressed[py.K_s]:
-            if pressed[py.K_q]:
-                self.player.move_left()
-            elif pressed[py.K_d]:
-                self.player.move_right()
-            self.player.move_down()
-        elif pressed[py.K_q]:
-            self.player.move_left()
-        elif pressed[py.K_d]:
-            self.player.move_right()
-        elif pressed[py.K_e]:
-            self.player.life -= 10
-        else:
-            self.player.moving = False
+            elif pressed[py.K_e]:
+                self.player.life -= 10
+            elif pressed[py.K_ESCAPE]:
+                self.open_menu = True
+            else:
+                self.player.moving = False
+        if pressed[py.K_ESCAPE] and self.option_open:
+            self.option_open = False
 
     def run(self):
         running = True
@@ -58,7 +65,6 @@ class Game:
             
             if self.playing:
                 self.player.save_location()
-                self.handle_input()
                 self.update()
                 self.map_manager.draw()
                 
@@ -66,14 +72,27 @@ class Game:
                     self.player.change_player_life(100)
                     running = False
                     
+                if self.open_menu:
+                    menu = Menu(self.screen)
+                    menu.creer((0, 0, 255), True)
+                    self.open_menu = not menu.check_state('play')
+                    
+                    
             else:
-                menu = Menu()
-                menu.creer(self.screen, (0, 0, 255))
+                menu = Menu(self.screen)
+                menu.creer((0, 0, 255))
                 self.playing = menu.check_state('play')
                 
-                if menu.check_state('exit'):
-                    running = False
+            if menu.check_state('exit'):
+                running = False
+            if menu.check_state('option'):
+                self.option_open = True
                 
+            if self.option_open:
+                menu.creer_menu_options()
+                
+            
+            self.handle_input()
             py.display.flip()
             for event in py.event.get():
                 if event.type == py.QUIT:
