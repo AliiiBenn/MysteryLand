@@ -58,33 +58,32 @@ class Menu:
     def mouse_collide_rect(self, tmx_data):
         mouse_pos = py.mouse.get_pos()
         for obj in tmx_data.objects:
-            object_rect = py.Rect(obj.x, obj.y, obj.width, obj.height)
-            if object_rect.collidepoint(mouse_pos) and obj.type == "exit_option":
+            object_rect = py.Rect(obj.x * 2 + obj.width, obj.y * 2 + obj.height, obj.width, obj.height)
+            if object_rect.collidepoint(mouse_pos):
                 if py.mouse.get_pressed()[0]:
                     return True
                 
             
     def creer_menu_options(self):
-        # self.charger_menu_option()
-        # self.screen.blit(self.menu_option, (self.menu_option_rect))
-        
-        
         map_data = pyscroll.data.TiledMapData(self.tmx_data)
         self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        
-        self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
-        
+        self.map_layer.zoom = 2
         
         # rendre un layer invisible
-        # for layer in tmx_data.visible_layers:
+        # for layer in self.tmx_data.visible_layers:
         #     if layer.name == 'background':
         #         layer.visible = 0
         
+        self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
         
-        self.group.update()
-        # self.group.center((self.screen.get_width(), self.screen.get_height()))
-        self.screen.fill((255, 0, 0))
+        # self.screen.fill((255, 0, 0))
         self.group.draw(self.screen)
+        self.group.update()
+        
+        
+        
+        
+        
         
         
         

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="4">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="5">
  <tileset firstgid="1" source="Tilesets/Window.tsx"/>
  <tileset firstgid="5545" source="Tilesets/Window2.tsx"/>
  <layer id="1" name="background" width="20" height="16">
@@ -22,7 +22,7 @@
 2874,2875,2876,2877,2878,2879,2880,2881,2882,2883,2884,2885,2886,2887,2888,2889,2890,2891,2892,2893
 </data>
  </layer>
- <layer id="2" name="musique_true" width="20" height="16" opacity="0.9">
+ <layer id="2" name="musique_true" width="20" height="16">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
