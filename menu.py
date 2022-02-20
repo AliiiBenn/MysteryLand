@@ -26,7 +26,6 @@ class Button:
             if py.mouse.get_pressed()[0] and not self.clicked:
                 return True
         
-        
 
 class Menu:
     def __init__(self, screen):
