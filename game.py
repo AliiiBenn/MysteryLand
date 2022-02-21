@@ -1,5 +1,5 @@
 import pygame as py
-from player import Player
+import player
 from json_management import JsonManagement as JM
 from map import MapManager
 from menu import Menu
@@ -17,7 +17,8 @@ class Game:
         icon = py.image.load('img/logo.png')
         py.display.set_icon(icon)
 
-        self.player = Player(0, 0, 100)
+        self.player = player.Player(0, 0, 100)
+        self.player_informations = player.PlayerInformation()
         self.map_manager = MapManager(self.screen, self.player)
         
         self.playing = False
@@ -101,6 +102,8 @@ class Game:
                     if self.playing:
                         self.player.change_player_position()
                         self.player.change_player_life(self.player.life)
+                        self.player_informations.create_new_user('AliBen', '5', 150, 3, 25)
+                        
                     running = False
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)

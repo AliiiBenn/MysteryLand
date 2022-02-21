@@ -1,6 +1,7 @@
 import pygame as py
 from Entity import Entity
 from json_management import JsonManagement as JM
+from database_link import DatabaseLink
 
 class Player(Entity):
     def __init__(self, x, y, life):
@@ -38,3 +39,18 @@ class Player(Entity):
         
     def is_player_dead(self):
         return self.life <= 0
+    
+class PlayerInformation(DatabaseLink):
+    def __init__(self):
+        super().__init__()
+        
+    
+    def create_new_user(self, user_name, dungeons, money, level, xp):
+        return self.users_ref.update({
+            user_name : {
+                'nickname' : user_name,
+                'dungeons' : dungeons,
+                'money' : money,
+                'level' : [level, xp]
+            }
+        })
