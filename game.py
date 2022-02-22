@@ -13,12 +13,16 @@ class Game:
         screen_width, screen_height = 1200, 600
         self.screen = py.display.set_mode((screen_width, screen_height), py.RESIZABLE)
         py.display.set_caption("MysteryLand")
+        
+        self.player_informations = player.PlayerInformation()
 
         icon = py.image.load('img/logo.png')
         py.display.set_icon(icon)
-
+        if JM.get_specific_information('["player"]["new_game"]'):
+            self.new_player('AliBen')
+            self.not_new_game()
+            
         self.player = player.Player(0, 0, 100)
-        self.player_informations = player.PlayerInformation()
         self.map_manager = MapManager(self.screen, self.player)
         
         self.playing = False
@@ -28,6 +32,40 @@ class Game:
         
     def update(self):
         self.map_manager.update()
+        
+    def new_player(self, nickname):
+        player = JM.open_file('saves')
+        
+        player["player"].update({
+            "position" : [0, 0],
+            "life" : 100,
+            "current_world" : "World",
+            "database_data" : {
+                "dungeons" : 0,
+                "nickname" : nickname,
+                "money" : 0,
+                "level" : [0, 0]
+            }
+            
+        })
+        
+        self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
+        JM.write_file('saves', player)
+        
+    def not_new_game(self):
+        new_game = JM.open_file('saves')
+        new_game["player"]["new_game"] = False
+        JM.write_file('saves', new_game)
+        
+    def database_update_quitting(self):
+        informations = self.player_informations.get_json_informations()
+        self.player_informations.update_user_informations(
+            informations["nickname"],
+            informations["dungeons"],
+            informations["money"],
+            informations["level"][0],
+            informations["level"][1]
+        )
     
     def handle_input(self):
         pressed = py.key.get_pressed()
@@ -64,6 +102,7 @@ class Game:
             CLOCK.tick(FPS)
             
             
+            
             if self.playing:
                 self.player.save_location()
                 self.update()
@@ -86,6 +125,10 @@ class Game:
                 
             if menu.check_state('exit'):
                 running = False
+                self.player.change_player_position()
+                self.player.change_player_life(self.player.life)
+                self.database_update_quitting()
+                
             if menu.check_state('option'):
                 self.option_open = True
                 
@@ -102,8 +145,7 @@ class Game:
                     if self.playing:
                         self.player.change_player_position()
                         self.player.change_player_life(self.player.life)
-                        self.player_informations.create_new_user('AliBen', '5', 150, 3, 25)
-                        
+                        self.database_update_quitting()
                     running = False
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)

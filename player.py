@@ -45,7 +45,7 @@ class PlayerInformation(DatabaseLink):
         super().__init__()
         
     
-    def create_new_user(self, user_name, dungeons, money, level, xp):
+    def update_user_informations(self, user_name, dungeons, money, level, xp):
         return self.users_ref.update({
             user_name : {
                 'nickname' : user_name,
@@ -54,3 +54,6 @@ class PlayerInformation(DatabaseLink):
                 'level' : [level, xp]
             }
         })
+        
+    def get_json_informations(self):
+        return JM.get_specific_information('["player"]["database_data"]')

@@ -15,3 +15,4 @@ class JsonManagement:
     def get_specific_information(path):
         data = JsonManagement.open_file('saves')
         return eval(f"{data}{path}")
+        
