@@ -1,8 +1,9 @@
 import pygame as py
+import requests
 import player
 from json_management import JsonManagement as JM
 from map import MapManager
-from menu import Menu
+from menu import Menu, NewPlayerMenu
 
 # test
 CLOCK = py.time.Clock()
@@ -18,22 +19,29 @@ class Game:
 
         icon = py.image.load('img/logo.png')
         py.display.set_icon(icon)
-        if JM.get_specific_information('["player"]["new_game"]'):
-            self.new_player('AliBen')
-            self.not_new_game()
-            
-        self.player = player.Player(0, 0, 100)
-        self.map_manager = MapManager(self.screen, self.player)
         
         self.playing = False
         self.open_menu = False
         self.option_open = False
+        self.new_player_menu = NewPlayerMenu(self.screen)
         
-        
+                
+        if not self.is_new_game():
+            self.initialise_game()
+
+
     def update(self):
         self.map_manager.update()
         
-    def new_player(self, nickname):
+    def initialise_game(self) -> None:
+        self.open_menu = True    
+        self.player = player.Player(0, 0, 100)
+        self.map_manager = MapManager(self.screen, self.player)
+        
+    def is_new_game(self) -> bool:
+        return JM.get_specific_information('["player"]["new_game"]')
+        
+    def new_player(self, nickname) -> None:
         player = JM.open_file('saves')
         
         player["player"].update({
@@ -52,9 +60,9 @@ class Game:
         self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
         JM.write_file('saves', player)
         
-    def not_new_game(self):
+    def change_game_status(self, state):
         new_game = JM.open_file('saves')
-        new_game["player"]["new_game"] = False
+        new_game["player"]["new_game"] = state
         JM.write_file('saves', new_game)
         
     def database_update_quitting(self):
@@ -66,6 +74,25 @@ class Game:
             informations["level"][0],
             informations["level"][1]
         )
+        
+    def check_internet_connection(self):
+        url = "http://www.google.com"
+        timeout = 5
+        try:
+            request = requests.get(url, timeout=timeout)
+            return True
+        except (requests.ConnectionError, requests.Timeout) as exception:
+            return False
+        
+    def ouvrir_menu(self) -> None:
+        menu = Menu(self.screen)
+        if not self.playing:
+            menu.creer((0, 0, 255))
+            self.playing = menu.check_state('play')
+            self.open_menu = not menu.check_state('play')
+        else:
+            menu.creer((0, 0, 255), True)
+            self.open_menu = not menu.check_state('play')
     
     def handle_input(self):
         pressed = py.key.get_pressed()
@@ -111,32 +138,40 @@ class Game:
                 if self.player.is_player_dead():
                     self.player.change_player_life(100)
                     running = False
-                    
-                if self.open_menu:
-                    menu = Menu(self.screen)
-                    menu.creer((0, 0, 255), True)
-                    self.open_menu = not menu.check_state('play')
-                    
-                    
-            else:
-                menu = Menu(self.screen)
-                menu.creer((0, 0, 255))
-                self.playing = menu.check_state('play')
-                
-            if menu.check_state('exit'):
-                running = False
-                self.player.change_player_position()
-                self.player.change_player_life(self.player.life)
-                self.database_update_quitting()
-                
-            if menu.check_state('option'):
-                self.option_open = True
-                
-            if self.option_open:
-                menu.creer_menu_options()
             
-            if menu.quit_option:
-                self.option_open = False   
+            elif self.is_new_game():
+                # print(JM.get_specific_information('["player"]["new_game"]'))
+                # self.new_player('AliBen')
+                # self.change_game_status(False)
+                
+                self.new_player_menu.create()
+                    
+            if self.open_menu:
+                self.ouvrir_menu()
+                
+                
+                    
+            # else:
+            #         menu = Menu(self.screen)
+            #         menu.creer((0, 0, 255))
+            #         self.playing = menu.check_state('play')
+                
+            # if self.open_menu:    
+            #     if menu.check_state('exit'):
+            #         running = False
+            #         self.player.change_player_position()
+            #         self.player.change_player_life(self.player.life)
+            #         if self.check_internet_connection:
+            #             self.database_update_quitting()
+                    
+            #     if menu.check_state('option'):
+            #         self.option_open = True
+                    
+            #     if self.option_open:
+            #         menu.creer_menu_options()
+                
+            #     if menu.quit_option:
+            #         self.option_open = False   
             
             self.handle_input()
             py.display.flip()
@@ -145,11 +180,19 @@ class Game:
                     if self.playing:
                         self.player.change_player_position()
                         self.player.change_player_life(self.player.life)
-                        self.database_update_quitting()
+                        if self.check_internet_connection:
+                            self.database_update_quitting()
                     running = False
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)
-                    self.map_manager.change_zoom(event.size[0], event.size[1])
+                    if self.playing:
+                        self.map_manager.change_zoom(event.size[0], event.size[1])
+                if self.is_new_game():
+                    enter_key_pressed = self.new_player_menu.user_input.handle_event(event)
+                    if enter_key_pressed:
+                        self.new_player(str(enter_key_pressed[1]))
+                        self.change_game_status(False)
+                        self.initialise_game()
 
             
 

@@ -26,7 +26,43 @@ class Button:
             if py.mouse.get_pressed()[0] and not self.clicked:
                 return True
         
-        
+class InputBox:
+    def __init__(self, x, y, w, h, text=''):
+        self.FONT = py.font.SysFont('Corbel', 75)
+        self.color = (0, 0, 0)
+        self.rect = py.Rect(x, y, w, h)
+        self.rect.center = (x, y)
+        self.text = text
+        self.txt_surface = self.FONT.render(text, True, self.color)
+        self.active = False
+
+    def handle_event(self, event):
+        if event.type == py.MOUSEBUTTONDOWN:
+            # If the user clicked on the input_box rect.
+            if self.rect.collidepoint(event.pos):
+                # Toggle the active variable.
+                self.active = not self.active
+            else:
+                self.active = False
+        if event.type == py.KEYDOWN:
+            if self.active:
+                if event.key == py.K_RETURN:
+                    return [True, self.text]
+                elif event.key == py.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
+                # Re-render the text.
+                self.txt_surface = self.FONT.render(self.text, True, self.color)
+
+    def update(self, x, y):
+        width = max(200, self.txt_surface.get_width()+10)
+        self.rect.w = width 
+        self.rect.center = (x, y)
+
+    def draw(self, screen):
+        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+        py.draw.rect(screen, self.color, self.rect, 2)    
 
 
 class Menu:
@@ -71,23 +107,18 @@ class Menu:
         self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
         self.map_layer.zoom = 2
         
-        # rendre un layer invisible
-        # for layer in self.tmx_data.visible_layers:
-        #     if layer.name == 'background':
-        #         layer.visible = 0
-        
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
-        
-        # self.screen.fill((255, 0, 0))
         self.group.draw(self.screen)
         self.group.update()
         
         
+class NewPlayerMenu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = py.font.SysFont(None, 100)
+        self.user_input = InputBox(self.screen.get_width() / 2, self.screen.get_height() / 2, 400, 100, "")
         
-        
-        
-        
-        
-        
-        # print(tmx_data.visible_layers)
-    
+    def create(self):
+        self.screen.fill((0, 0, 255))
+        self.user_input.update(self.screen.get_width() / 2, self.screen.get_height() / 2)
+        self.user_input.draw(self.screen)

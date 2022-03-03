@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import pygame as py
 import pytmx, pyscroll
-from npc import Basicnpc
+from npc import Basicnpc, ShopNPC
 from json_management import JsonManagement as JM
 from player import Player
 from TiledEntity import TiledEntity
@@ -22,6 +22,7 @@ class Map:
     tmx_data : pytmx.TiledMap
     portals : list[Portal]
     npcs : list[Basicnpc]
+    shops : list[ShopNPC]
     
 class MapManager:
     def __init__(self, screen, player):
@@ -73,7 +74,7 @@ class MapManager:
         self.player.position[1] = point.y
         self.player.save_location()  
         
-    def register_map(self, name, portals=[], npcs=[]):
+    def register_map(self, name, portals=[], npcs=[], shops=[]):
         # charger la carte (tmx)
         tmx_data = pytmx.util_pygame.load_pygame(f'Maps/{name}.tmx')
         map_data = pyscroll.data.TiledMapData(tmx_data)
@@ -107,7 +108,7 @@ class MapManager:
             group.add(npc)
         
         # creer un objet map
-        self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs)
+        self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, shops)
         
     def change_zoom(self, width, height):
         self.map_layer.zoom = 5.6 - ((width + height) / 720)

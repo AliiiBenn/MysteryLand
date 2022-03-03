@@ -1,20 +1,5 @@
 {
     "player": {
-        "new_game": false,
-        "position": [
-            6710,
-            5820
-        ],
-        "life": 100,
-        "current_world": "World",
-        "database_data": {
-            "dungeons": 0,
-            "nickname": "AliBen",
-            "money": 0,
-            "level": [
-                0,
-                0
-            ]
-        }
+        "new_game": true
     }
 }

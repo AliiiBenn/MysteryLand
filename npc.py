@@ -2,8 +2,6 @@ import pygame as py
 from player import Entity
 
 
-# TODO : Changer le système de NPC pour le remplacer par une class npc qui a comme super class Entity et qui va devenir la super class des deux sosu class de npc fin bref vous avez compris
-
 class NPC(Entity):
     def __init__(self, x, y, sprite):
         super().__init__(x, y, sprite)
@@ -57,3 +55,10 @@ class Basicnpc(NPC):
             point = tmx_data.get_object_by_name(f"{self.name}_path{num}")
             rect = py.Rect(point.x, point.y, point.width, point.height)
             self.points.append(rect)
+            
+            
+class ShopNPC(NPC):
+    def __init__(self, x, y, sprite):
+        super().__init__(x, y, sprite)
+        
+        
