@@ -12,7 +12,7 @@ class DatabaseLink:
     def initialize_app(self):
         return firebase_admin.initialize_app(self.cred, {'databaseURL' : 'https://mysteryland-fb22d-default-rtdb.europe-west1.firebasedatabase.app/'})
     
-    def create_child(self, child_name):
+    def create_child(self, child_name : str):
         return self.ref.child(child_name)
     
     

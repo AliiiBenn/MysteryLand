@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 import pygame as py
 import requests
 import player
@@ -30,7 +31,7 @@ class Game:
             self.initialise_game()
 
 
-    def update(self):
+    def update(self) -> None:
         self.map_manager.update()
         
     def initialise_game(self) -> None:
@@ -60,12 +61,12 @@ class Game:
         self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
         JM.write_file('saves', player)
         
-    def change_game_status(self, state):
+    def change_game_status(self, state : int) -> None:
         new_game = JM.open_file('saves')
         new_game["player"]["new_game"] = state
         JM.write_file('saves', new_game)
         
-    def database_update_quitting(self):
+    def database_update_quitting(self) -> None:
         informations = self.player_informations.get_json_informations()
         self.player_informations.update_user_informations(
             informations["nickname"],
@@ -75,7 +76,7 @@ class Game:
             informations["level"][1]
         )
         
-    def check_internet_connection(self):
+    def check_internet_connection(self) -> bool:
         url = "http://www.google.com"
         timeout = 5
         try:
@@ -94,7 +95,7 @@ class Game:
             menu.creer((0, 0, 255), True)
             self.open_menu = not menu.check_state('play')
     
-    def handle_input(self):
+    def handle_input(self) -> None:
         pressed = py.key.get_pressed()
         
         if self.playing:
@@ -123,7 +124,7 @@ class Game:
         if pressed[py.K_ESCAPE] and self.option_open:
             self.option_open = False
 
-    def run(self):
+    def run(self) -> None:
         running = True
         while running:
             CLOCK.tick(FPS)

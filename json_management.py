@@ -3,16 +3,16 @@ import json
 
 
 class JsonManagement:
-    def open_file(filename):
+    def open_file(filename) -> dict:
         with open(f'data/{filename}.json', 'r') as f:
             data = json.load(f)
         return data
     
-    def write_file(filename, data):
+    def write_file(filename, data) -> None:
         with open(f'data/{filename}.json', 'w') as f:
             json.dump(data, f, indent = 4)
             
-    def get_specific_information(path):
+    def get_specific_information(path) -> dict:
         data = JsonManagement.open_file('saves')
         return eval(f"{data}{path}")
         

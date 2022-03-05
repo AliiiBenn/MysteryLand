@@ -45,14 +45,14 @@ class Animation(py.sprite.Sprite):
             
         return images
         
-    def get_image(self, x, y):
+    def get_image(self, x : int, y : int):
         image = py.Surface([16, 32])
         image.blit(self.sprite_sheet, (0, 0), (x, y, 16, 32))
         return image
 
 
 class Entity(Animation):
-    def __init__(self, x, y, image_src):
+    def __init__(self, x : int, y : int, image_src):
         super().__init__(image_src)
         self.x = x
         self.y = y
@@ -66,35 +66,35 @@ class Entity(Animation):
         self.moving = False
         self.direction = 0
         
-    def update(self):
+    def update(self) -> None:
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
         self.idling()
         
-    def save_location(self):
+    def save_location(self) -> None:
         self.old_position = self.position.copy()
         
-    def idling(self):
+    def idling(self) -> None:
         direction = {0 : 'right', 1 : 'up', 2 : 'left', 3 : 'down'}
         if not self.moving:
             self.change_animation(f'idle_{direction[self.direction]}')
         
-    def move_right(self):
+    def move_right(self) -> None:
         self.change_animation("walk_right")
         self.position[0] += self.speed
         self.moving, self.direction = True, 0
     
-    def move_left(self):
+    def move_left(self) -> None:
         self.change_animation("walk_left")
         self.position[0] -= self.speed
         self.moving, self.direction = True, 2
     
-    def move_up(self):
+    def move_up(self) -> None:
         self.change_animation("walk_up")
         self.position[1] -= self.speed
         self.moving, self.direction = True, 1
     
-    def move_down(self):
+    def move_down(self) -> None:
         self.change_animation("walk_down")
         self.position[1] += self.speed
         self.moving, self.direction = True, 3
@@ -129,7 +129,7 @@ class Entity(Animation):
     
     
     
-    def move_back(self):
+    def move_back(self) -> None:
         self.position = self.old_position
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
