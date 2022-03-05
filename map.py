@@ -25,7 +25,7 @@ class Map:
     shops : list[ShopNPC]
     
 class MapManager:
-    def __init__(self, screen, player):
+    def __init__(self, screen: int, player : str):
         self.screen = screen
         self.player = player
         self.maps = dict()
@@ -110,7 +110,7 @@ class MapManager:
         # creer un objet map
         self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, shops)
         
-    def change_zoom(self, width, height) -> dict:
+    def change_zoom(self, width: int, height: int) -> dict:
         self.map_layer.zoom = 5.6 - ((width + height) / 720)
         return self.map_layer
         
