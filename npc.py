@@ -1,18 +1,18 @@
 import pygame as py
-from player import Entity
-#TEST
+from Entity import Entity
+
 
 class NPC(Entity):
-    def __init__(self, x, y, sprite):
+    def __init__(self, x : int, y : int, sprite : str) -> None:
         super().__init__(x, y, sprite)
 
 
 class Specialnpc(NPC):
-    def __init__(self, x, y, sprite):
+    def __init__(self, x : int, y : int, sprite : str) -> None:
         super().__init__(x, y, sprite)
         
 class Basicnpc(NPC):
-    def __init__(self, sprite, nb_points):
+    def __init__(self, sprite : str, nb_points : int) -> None:
         super().__init__(0, 0, sprite)
         self.nb_points = nb_points
         self.points = []
@@ -21,7 +21,10 @@ class Basicnpc(NPC):
         self.current_point = 0
         
         
-    def move(self):
+    def move(self) -> None:
+        '''
+        Définie la trajectoire des NPCS basiques
+        '''
         current_point = self.current_point
         target_point = self.current_point + 1
         
@@ -44,13 +47,19 @@ class Basicnpc(NPC):
         if self.rect.colliderect(target_rect):
             self.current_point = target_point
 
-    def teleport_spawn(self):
+    def teleport_spawn(self) -> None:
+        '''
+        Place le NPC sur le point de spawn de la dernière position (ou de la position de base si 1ère partie)
+        '''
         location = self.points[self.current_point]
         self.position[0] = location.x
         self.position[1] = location.y
-        self.save_location()
+        self.save_location() #Enregistre la localisation
         
-    def load_points(self, tmx_data):
+    def load_points(self, tmx_data) -> None:
+        '''
+        Charge les points de trajectoires des NPCS Basiques
+        '''
         for num in range(1, self.nb_points+1):
             point = tmx_data.get_object_by_name(f"{self.name}_path{num}")
             rect = py.Rect(point.x, point.y, point.width, point.height)
@@ -58,7 +67,7 @@ class Basicnpc(NPC):
             
             
 class ShopNPC(NPC):
-    def __init__(self, x, y, sprite):
+    def __init__(self, x : int, y : int, sprite : str) -> None:
         super().__init__(x, y, sprite)
         
         
