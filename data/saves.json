@@ -1,5 +1,20 @@
 {
     "player": {
-        "new_game": true
+        "new_game": false,
+        "position": [
+            1324,
+            2072
+        ],
+        "life": 100,
+        "current_world": "World",
+        "database_data": {
+            "dungeons": 0,
+            "nickname": "Eiramme",
+            "money": 0,
+            "level": [
+                0,
+                0
+            ]
+        }
     }
 }
