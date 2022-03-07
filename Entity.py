@@ -20,7 +20,7 @@ class Animation(py.sprite.Sprite):
             'walk_down' : self.get_images(64, 18, 24)
         }
         
-    def change_animation(self, animation_name : str) -> None:
+    def change_animation(self, animation_name : str, diagonale = False) -> None:
         self.image = self.images[animation_name][self.animation_index]
         # self.image = py.transform.scale(self.image, (int(self.image.get_width() * self.scale), int(self.image.get_height() * self.scale)))
         self.image.set_colorkey([0, 0, 0])
@@ -78,26 +78,64 @@ class Entity(Animation):
         direction = {0 : 'right', 1 : 'up', 2 : 'left', 3 : 'down'}
         if not self.moving:
             self.change_animation(f'idle_{direction[self.direction]}')
-        
-    def move_right(self) -> None:
-        self.change_animation("walk_right")
-        self.position[0] += self.speed
-        self.moving, self.direction = True, 0
+
+    # Directions + gestions de la diagonale :
     
-    def move_left(self) -> None:
-        self.change_animation("walk_left")
-        self.position[0] -= self.speed
-        self.moving, self.direction = True, 2
-    
-    def move_up(self) -> None:
-        self.change_animation("walk_up")
-        self.position[1] -= self.speed
+    def move_up(self, diagonale = False) -> None:
+        if diagonale :
+            self.change_animation("walk_up", True)
+            self.position[1] -= (self.speed//2) + 0.45
+        else :
+            self.change_animation("walk_up")
+            self.position[1] -= self.speed
         self.moving, self.direction = True, 1
     
-    def move_down(self) -> None:
-        self.change_animation("walk_down")
-        self.position[1] += self.speed
+    def move_down(self, diagonale = False) -> None:
+        
+        if diagonale :
+            self.change_animation("walk_down", True)
+            self.position[1] += (self.speed//2) + 0.45
+        else :
+            self.change_animation("walk_down")
+            self.position[1] += self.speed
         self.moving, self.direction = True, 3
+        
+    def right(self, diagonale = False): 
+        if diagonale : 
+            self.position[0] += (self.speed//2) + 0.45
+        else : 
+            self.change_animation("walk_right")
+            self.position[0] += self.speed #Seulement droite
+        self.moving, self.direction = True, 0
+
+    def left(self, diagonale = False): 
+        if diagonale : 
+            self.position[0] -= (self.speed//2) + 0.45
+        else : 
+            self.change_animation("walk_left")
+            self.position[0] -= self.speed #Seulement gauche
+        self.moving, self.direction = True, 2
+
+    def move_right(self, diagonale = '') -> None:
+        if diagonale == 'u' :
+            self.move_up(True)
+            self.right(True)
+        elif diagonale == 'd' :
+            self.move_down(True)
+            self.right(True)
+        else :
+            self.right()
+    
+    def move_left(self, diagonale = '') -> None:
+        self.change_animation("walk_left")
+        if diagonale == 'u' :
+            self.move_up(True)
+            self.left(True)
+        elif diagonale == 'd' :
+            self.move_down(True)
+            self.left(True)
+        else :
+            self.left()
 
     # diagonales
     
