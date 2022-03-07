@@ -2,8 +2,8 @@
     "player": {
         "new_game": false,
         "position": [
-            7227,
-            2116
+            7573,
+            302
         ],
         "life": 100,
         "current_world": "World",
