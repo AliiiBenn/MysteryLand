@@ -87,6 +87,14 @@ class Entity(Animation):
     '''
     
     def move_up(self, diagonale = False) -> None:
+        """Fonction qui permet le deplacement haut et diagonale haut (dans les deux directions)
+
+        Args:
+            param1: diagonale (False par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale :
             #self.change_animation("walk_up", True)
             self.position[1] -= self.speed #+ 0.45
@@ -96,6 +104,14 @@ class Entity(Animation):
         self.moving, self.direction = True, 1
     
     def move_down(self, diagonale = False) -> None:
+        """Fonction qui permet le deplacement bas et diagonale bas (dans les deux directions)
+
+        Args:
+            param1: diagonale (False par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale :
             self.position[1] += self.speed
         else :
@@ -104,6 +120,14 @@ class Entity(Animation):
         self.moving, self.direction = True, 3
         
     def right(self, diagonale = False): 
+        """Fonction qui permet le deplacement à droite (plus ou moins vite si le joueur se déplace en diagonale)
+
+        Args:
+            param1: diagonale (False par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale : 
             self.change_animation("walk_right")
             self.position[0] += (self.speed//2)
@@ -113,6 +137,14 @@ class Entity(Animation):
         self.moving, self.direction = True, 0
 
     def left(self, diagonale = False): 
+        """Fonction qui permet le deplacement à gauche (plus ou moins vite si le joueur se déplace en diagonale)
+
+        Args:
+            param1: diagonale (False par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale : 
             self.change_animation("walk_left")
             self.position[0] -= (self.speed//2) 
@@ -122,6 +154,17 @@ class Entity(Animation):
         self.moving, self.direction = True, 2
 
     def move_right(self, diagonale = '') -> None:
+        """Fonction qui interprète l'argument fourni par la méthode Game.handle_input pour connaitre la direction du déplacement droit (diagonale ou pas ? --> Si oui, diagonale haut ou bas ?)
+        'u' = up (droite + haut)
+        'd' = down (droite + bas)
+        '' = right (droite sans diagonale)
+
+        Args:
+            param1: diagonale ('' par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale == 'u' :
             self.move_up(True)
             self.right(True)
@@ -132,6 +175,17 @@ class Entity(Animation):
             self.right()
     
     def move_left(self, diagonale = '') -> None:
+        """Fonction qui interprète l'argument fourni par la méthode Game.handle_input pour connaitre la direction du déplacement gauche (diagonale ou pas ? --> Si oui, diagonale haut ou bas ?)
+        'u' = up (gauche + haut)
+        'd' = down (gauche + bas)
+        '' = left (gauche sans diagonale)
+
+        Args:
+            param1: diagonale ('' par défaut)
+
+        Returns:
+            La fonction ne retourne rien --> None
+        """
         if diagonale == 'u' :
             self.move_up(True)
             self.left(True)
@@ -141,36 +195,6 @@ class Entity(Animation):
         else :
             self.left()
 
-    # diagonales
-    
-    # def move_up_right(self):
-    #     self.change_animation("walk_up")
-    #     self.position[0] += self.speed/2
-    #     self.position[1] -= self.speed/2
-    #     self.moving, self.direction = True, 1
-        
-    # def move_up_left(self):
-    #     self.change_animation("walk_up")
-    #     self.position[0] -= self.speed/2
-    #     self.position[1] -= self.speed/2
-    #     self.moving, self.direction = True, 1
-
-    # def move_down_left(self):
-    #     self.change_animation("walk_down")
-    #     self.position[0] -= self.speed/2
-    #     self.position[1] += self.speed/2
-    #     self.moving, self.direction = True, 3
-
-    # def move_down_right(self):
-    #     self.change_animation("walk_down")
-    #     self.position[0] += self.speed/2
-    #     self.position[1] += self.speed/2
-    #     self.moving, self.direction = True, 3
-
-
-    
-    
-    
     def move_back(self) -> None:
         self.position = self.old_position
         self.rect.topleft = self.position
