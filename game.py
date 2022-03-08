@@ -125,20 +125,22 @@ class Game:
         if self.playing:
             if pressed[py.K_z]:
                 if pressed[py.K_q]:
-                    self.player.move_left()
+                    self.player.move_left("u")
                 elif pressed[py.K_d]:
-                    self.player.move_right()
-                self.player.move_up()
+                    self.player.move_right("u")
+                else :
+                    self.player.move_up()
             elif pressed[py.K_s]:
                 if pressed[py.K_q]:
-                    self.player.move_left()
+                    self.player.move_left("d")
                 elif pressed[py.K_d]:
-                    self.player.move_right()
-                self.player.move_down()
+                    self.player.move_right("d")
+                else :
+                    self.player.move_down()
             elif pressed[py.K_q]:
-                self.player.move_left()
+                self.player.left()
             elif pressed[py.K_d]:
-                self.player.move_right()
+                self.player.right()
             elif pressed[py.K_e]:
                 self.player.life -= 10
             elif pressed[py.K_ESCAPE]:
