@@ -33,26 +33,31 @@ class Game:
 
 
     def update(self) -> None:
+        """Met à jour le système de map
+        """
         self.map_manager.update()
         
     def initialise_game(self) -> None:
-        '''
-        inistialise le jeu
-        '''
+        """Lance le jeu avec le menu, le joueur et la map
+        """
         self.open_menu = True    
         self.player = player.Player(0, 0, 100)
         self.map_manager = MapManager(self.screen, self.player)
         
     def is_new_game(self) -> bool:
-        '''
-        savoir si c'est la première connexion au jeu ou non
-        '''
+        """Regarde si la partie est nouvelle
+
+        Returns:
+            bool: retourne un booleen qui correspond à l'etat de la partie, True si elle est nouvelle sinon False
+        """
         return JM.get_specific_information('["player"]["new_game"]')
         
     def new_player(self, nickname: str) -> None:
-        '''
-        création d'un player avec notre id
-        '''
+        """Créer un nouveau joueur dans le fichier saves.json
+
+        Args:
+            nickname (str): le nom du joueur
+        """
         player = JM.open_file('saves')
         
         player["player"].update({
@@ -71,18 +76,19 @@ class Game:
         self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
         JM.write_file('saves', player)
         
-    def change_game_status(self, state : int) -> None:
-        '''
-        change les données du joueur
-        '''
+    def change_game_status(self, state : bool) -> None:
+        """Change l'état du jeu quand une nouvelle partie est créee
+
+        Args:
+            state (bool): Etat du jeu qui correspond à state 
+        """
         new_game = JM.open_file('saves')
         new_game["player"]["new_game"] = state
         JM.write_file('saves', new_game)
         
     def database_update_quitting(self) -> None:
-        '''
-        sauvegarde les données du joueur
-        '''
+        """Sauvegarde les données du joueur dans une base de donnée
+        """
         informations = self.player_informations.get_json_informations()
         self.player_informations.update_user_informations(
             informations["nickname"],
@@ -93,9 +99,11 @@ class Game:
         )
         
     def check_internet_connection(self) -> bool:
-        '''
-        test la connexion internet
-        '''
+        """Fais une requette internet pour savoir si l'ordinateur est connecté à internet
+
+        Returns:
+            bool: renvoie l'état de la connexion, True si connecté sinon False
+        """
         url = "http://www.google.com"
         timeout = 5
         try:
@@ -105,10 +113,8 @@ class Game:
             return False
         
     def ouvrir_menu(self) -> None:
-        '''
-        ouvre le menu
-        '''
-        
+        """Ouvre le menu
+        """
         if not self.playing:
             self.menu.creer((0, 0, 255))
             self.playing = self.menu.check_state('play')
@@ -118,8 +124,7 @@ class Game:
             self.open_menu = not self.menu.check_state('play')
             
     def quit_game(self) -> None:
-        """
-        
+        """Méthode pour quitter le jeu et faire toutes les mises à jour nécéssaires
         """
         if self.playing:
             self.player.change_player_position()
@@ -130,9 +135,8 @@ class Game:
             
     
     def handle_input(self) -> None:
-        '''
-        detection si une touche est pressée
-        '''
+        """Méthode qui gère toutes les entrées clavier du joueur
+        """
         pressed = py.key.get_pressed()
         
         if self.playing:
@@ -162,9 +166,8 @@ class Game:
                 self.player.moving = False
 
     def run(self) -> None:
-        '''
-        lancer le jeu
-        '''
+        """Méthode principale qui lance le jeu
+        """
         running = True
         while running:
             CLOCK.tick(FPS)
