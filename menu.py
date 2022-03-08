@@ -18,9 +18,19 @@ class Button:
         self.clicked = False
         
     def creer(self, screen) -> None:
+        """Créer un nouveau bouton
+
+        Args:
+            screen (py.display): screen sur lequel on va afficher le bouton
+        """
         screen.blit(self.image, self.rect)
         
-    def check_collisions(self):
+    def check_collisions(self) -> bool:
+        """Renvoie True si il y a collision entre un bouton et la souris
+
+        Returns:
+            bool: collision entre le bouton et la souris
+        """
         mouse_pos = py.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
             if py.mouse.get_pressed()[0] and not self.clicked:
@@ -36,7 +46,15 @@ class InputBox:
         self.txt_surface = self.FONT.render(text, True, self.color)
         self.active = False
 
-    def handle_event(self, event):
+    def handle_event(self, event) -> list:
+        """Méthode principale qui va gérer l'affichage du texte et la touche entrer
+
+        Args:
+            event (py.event): liste des evenements pygame
+
+        Returns:
+            list: renvoie une liste avec un booleen et le texte
+        """
         if event.type == py.MOUSEBUTTONDOWN:
             # If the user clicked on the input_box rect.
             if self.rect.collidepoint(event.pos):
@@ -55,12 +73,23 @@ class InputBox:
                 # Re-render the text.
                 self.txt_surface = self.FONT.render(self.text, True, self.color)
 
-    def update(self, x, y):
+    def update(self, x, y) -> None:
+        """met à jour l'input box
+
+        Args:
+            x (int): position en x
+            y (int): position en y
+        """
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width 
         self.rect.center = (x, y)
 
     def draw(self, screen):
+        """Créer le bouton 
+
+        Args:
+            screen (py.display): l'ecran où l'input box va être affichée
+        """
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         py.draw.rect(screen, self.color, self.rect, 2)    
 
@@ -73,6 +102,12 @@ class Menu:
         self.quit_option = self.mouse_collide_rect(self.tmx_data)
     
     def creer(self, color, in_game=False):
+        """Méthode qui créée le menu
+
+        Args:
+            color (tuple): couleur du menu 
+            in_game (bool, optional): Savoir si le joueur est en jeu. Defaults to False.
+        """
         if not in_game:
             self.screen.fill(color)
         for index, bouton in enumerate(['play', 'option', 'exit']):
@@ -81,6 +116,14 @@ class Menu:
             bouton.creer(self.screen)
             
     def check_state(self, state):
+        """Vérifie si il y a une collision entre le bouton state et la souris
+
+        Args:
+            state (str): nom du bouton
+
+        Returns:
+            bool: True si il y a collision sinon False
+        """
         for bouton in self.boutons:
             if bouton.check_collisions() and bouton.name == f'{state}_button':
                 return True
@@ -119,6 +162,8 @@ class NewPlayerMenu:
         self.user_input = InputBox(self.screen.get_width() / 2, self.screen.get_height() / 2, 400, 100, "")
         
     def create(self):
+        """Créer le menu de création de partie
+        """
         self.screen.fill((0, 0, 255))
         self.user_input.update(self.screen.get_width() / 2, self.screen.get_height() / 2)
         self.user_input.draw(self.screen)
