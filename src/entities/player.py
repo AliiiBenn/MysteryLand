@@ -1,7 +1,7 @@
 import pygame as py
-from Entity import Entity
-from json_management import JsonManagement as JM
-from database_link import DatabaseLink
+from .entity import Entity
+from database_management.json_management import JsonManagement as JM
+from database_management.database_link import DatabaseLink
 
 class Player(Entity):
     def __init__(self, x, y, life):

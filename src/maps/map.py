@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 import pygame as py
 import pytmx, pyscroll
-from npc import Basicnpc, ShopNPC
-from json_management import JsonManagement as JM
-from player import Player
-from TiledEntity import TiledEntity
+
+from objects.tiled_entity import TiledEntity
+from entities.player import Player
+from entities.npc import Basicnpc, ShopNPC
+from database_management import JsonManagement as JM
 
 
 @dataclass

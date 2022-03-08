@@ -1,10 +1,9 @@
-from xmlrpc.client import Boolean
 import pygame as py
 import requests
-import player
-from json_management import JsonManagement as JM
-from map import MapManager
-from menu import Menu, NewPlayerMenu
+import entities.player as player
+from database_management.json_management import JsonManagement as JM
+from maps.map import MapManager
+from widgets.menu import Menu, NewPlayerMenu
 
 # test
 CLOCK = py.time.Clock()

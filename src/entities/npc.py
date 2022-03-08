@@ -1,5 +1,5 @@
 import pygame as py
-from Entity import Entity
+from .entity import Entity
 
 
 class NPC(Entity):
