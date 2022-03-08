@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 import pygame as py
 import requests
 import player
@@ -30,18 +31,27 @@ class Game:
             self.initialise_game()
 
 
-    def update(self):
+    def update(self) -> None:
         self.map_manager.update()
         
     def initialise_game(self) -> None:
+        '''
+        inistialise le jeu
+        '''
         self.open_menu = True    
         self.player = player.Player(0, 0, 100)
         self.map_manager = MapManager(self.screen, self.player)
         
     def is_new_game(self) -> bool:
+        '''
+        savoir si c'est la première connexion au jeu ou non
+        '''
         return JM.get_specific_information('["player"]["new_game"]')
         
-    def new_player(self, nickname) -> None:
+    def new_player(self, nickname: str) -> None:
+        '''
+        création d'un player avec notre id
+        '''
         player = JM.open_file('saves')
         
         player["player"].update({
@@ -60,12 +70,18 @@ class Game:
         self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
         JM.write_file('saves', player)
         
-    def change_game_status(self, state):
+    def change_game_status(self, state : int) -> None:
+        '''
+        change les données du joueur
+        '''
         new_game = JM.open_file('saves')
         new_game["player"]["new_game"] = state
         JM.write_file('saves', new_game)
         
-    def database_update_quitting(self):
+    def database_update_quitting(self) -> None:
+        '''
+        sauvegarde les données du joueur
+        '''
         informations = self.player_informations.get_json_informations()
         self.player_informations.update_user_informations(
             informations["nickname"],
@@ -75,7 +91,10 @@ class Game:
             informations["level"][1]
         )
         
-    def check_internet_connection(self):
+    def check_internet_connection(self) -> bool:
+        '''
+        test la connexion internet
+        '''
         url = "http://www.google.com"
         timeout = 5
         try:
@@ -85,6 +104,9 @@ class Game:
             return False
         
     def ouvrir_menu(self) -> None:
+        '''
+        ouvre le menu
+        '''
         menu = Menu(self.screen)
         if not self.playing:
             menu.creer((0, 0, 255))
@@ -94,7 +116,10 @@ class Game:
             menu.creer((0, 0, 255), True)
             self.open_menu = not menu.check_state('play')
     
-    def handle_input(self):
+    def handle_input(self) -> None:
+        '''
+        detection si une touche est pressée
+        '''
         pressed = py.key.get_pressed()
         
         if self.playing:
@@ -123,7 +148,10 @@ class Game:
         if pressed[py.K_ESCAPE] and self.option_open:
             self.option_open = False
 
-    def run(self):
+    def run(self) -> None:
+        '''
+        lancer le jeu
+        '''
         running = True
         while running:
             CLOCK.tick(FPS)

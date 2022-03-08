@@ -2,14 +2,14 @@
     "player": {
         "new_game": false,
         "position": [
-            1324,
-            2072
+            4000,
+            4002
         ],
         "life": 100,
         "current_world": "World",
         "database_data": {
             "dungeons": 0,
-            "nickname": "Eiramme",
+            "nickname": "SID",
             "money": 0,
             "level": [
                 0,

@@ -17,7 +17,7 @@ class Button:
         self.rect.center = (self.x, self.y)
         self.clicked = False
         
-    def creer(self, screen):
+    def creer(self, screen) -> None:
         screen.blit(self.image, self.rect)
         
     def check_collisions(self):
