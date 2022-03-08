@@ -25,6 +25,7 @@ class Game:
         self.open_menu = False
         self.option_open = False
         self.new_player_menu = NewPlayerMenu(self.screen)
+        self.menu = Menu(self.screen)
         
                 
         if not self.is_new_game():
@@ -107,14 +108,26 @@ class Game:
         '''
         ouvre le menu
         '''
-        menu = Menu(self.screen)
+        
         if not self.playing:
-            menu.creer((0, 0, 255))
-            self.playing = menu.check_state('play')
-            self.open_menu = not menu.check_state('play')
+            self.menu.creer((0, 0, 255))
+            self.playing = self.menu.check_state('play')
+            self.open_menu = not self.menu.check_state('play')
         else:
-            menu.creer((0, 0, 255), True)
-            self.open_menu = not menu.check_state('play')
+            self.menu.creer((0, 0, 255), True)
+            self.open_menu = not self.menu.check_state('play')
+            
+    def quit_game(self) -> None:
+        """
+        
+        """
+        if self.playing:
+            self.player.change_player_position()
+            self.player.change_player_life(self.player.life)
+            if self.check_internet_connection:
+                self.database_update_quitting()
+
+            
     
     def handle_input(self) -> None:
         '''
@@ -147,8 +160,6 @@ class Game:
                 self.open_menu = True
             else:
                 self.player.moving = False
-        if pressed[py.K_ESCAPE] and self.option_open:
-            self.option_open = False
 
     def run(self) -> None:
         '''
@@ -170,53 +181,29 @@ class Game:
                     running = False
             
             elif self.is_new_game():
-                # print(JM.get_specific_information('["player"]["new_game"]'))
-                # self.new_player('AliBen')
-                # self.change_game_status(False)
-                
                 self.new_player_menu.create()
+                    
                     
             if self.open_menu:
                 self.ouvrir_menu()
+                if self.menu.check_state('exit'):
+                    self.quit_game()
+                    running = False
                 
                 
-                    
-            # else:
-            #         menu = Menu(self.screen)
-            #         menu.creer((0, 0, 255))
-            #         self.playing = menu.check_state('play')
-                
-            # if self.open_menu:    
-            #     if menu.check_state('exit'):
-            #         running = False
-            #         self.player.change_player_position()
-            #         self.player.change_player_life(self.player.life)
-            #         if self.check_internet_connection:
-            #             self.database_update_quitting()
-                    
-            #     if menu.check_state('option'):
-            #         self.option_open = True
-                    
-            #     if self.option_open:
-            #         menu.creer_menu_options()
-                
-            #     if menu.quit_option:
-            #         self.option_open = False   
-            
             self.handle_input()
             py.display.flip()
             for event in py.event.get():
                 if event.type == py.QUIT:
                     if self.playing:
-                        self.player.change_player_position()
-                        self.player.change_player_life(self.player.life)
-                        if self.check_internet_connection:
-                            self.database_update_quitting()
+                        self.quit_game()
                     running = False
+                    
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)
                     if self.playing:
                         self.map_manager.change_zoom(event.size[0], event.size[1])
+                        
                 if self.is_new_game():
                     enter_key_pressed = self.new_player_menu.user_input.handle_event(event)
                     if enter_key_pressed:

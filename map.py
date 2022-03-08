@@ -90,7 +90,6 @@ class MapManager:
         
         
         for obj in tmx_data.objects:
-            print(obj.x, obj.y, obj.width, obj.height, obj.name, obj.type)
             if obj.type == "collisions":
                 walls.append(py.Rect(obj.x, obj.y, obj.width, obj.height))
             elif obj.type == "test":
