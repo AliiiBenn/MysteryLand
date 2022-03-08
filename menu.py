@@ -18,9 +18,19 @@ class Button:
         self.clicked = False
         
     def creer(self, screen) -> None:
+        """créer l'image sur l'écran
+
+        Args:
+            screen (_type_): écran
+        """
         screen.blit(self.image, self.rect)
         
-    def check_collisions(self):
+    def check_collisions(self) -> bool:
+        """vérifie si l'on clique sur le bouton
+
+        Returns:
+            bool: true si collision
+        """
         mouse_pos = py.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
             if py.mouse.get_pressed()[0] and not self.clicked:
@@ -36,7 +46,15 @@ class InputBox:
         self.txt_surface = self.FONT.render(text, True, self.color)
         self.active = False
 
-    def handle_event(self, event):
+    def handle_event(self, event) -> bool:
+        """evenement si on clique 
+
+        Args:
+            event (_type_): evenement
+
+        Returns:
+            bool: True 
+        """
         if event.type == py.MOUSEBUTTONDOWN:
             # If the user clicked on the input_box rect.
             if self.rect.collidepoint(event.pos):
@@ -55,12 +73,23 @@ class InputBox:
                 # Re-render the text.
                 self.txt_surface = self.FONT.render(self.text, True, self.color)
 
-    def update(self, x, y):
+    def update(self, x: int , y: int):
+        """met a jour le screen
+
+        Args:
+            x (int): position en x
+            y (int): position en y
+        """
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width 
         self.rect.center = (x, y)
 
     def draw(self, screen):
+        """dessine sur l'ecran
+
+        Args:
+            screen (_type_): écran
+        """
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         py.draw.rect(screen, self.color, self.rect, 2)    
 
