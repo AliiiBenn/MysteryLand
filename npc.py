@@ -22,9 +22,8 @@ class Basicnpc(NPC):
         
         
     def move(self) -> None:
-        '''
-        Définie la trajectoire des NPCS basiques
-        '''
+        """Définie la trajectoire des NPCS basiques
+        """
         current_point = self.current_point
         target_point = self.current_point + 1
         
@@ -48,18 +47,19 @@ class Basicnpc(NPC):
             self.current_point = target_point
 
     def teleport_spawn(self) -> None:
-        '''
-        Place le NPC sur le point de spawn de la dernière position (ou de la position de base si 1ère partie)
-        '''
+        """Place le NPC sur le point de spawn de la dernière position (ou de la position de base si 1ère partie)
+        """
         location = self.points[self.current_point]
         self.position[0] = location.x
         self.position[1] = location.y
         self.save_location() #Enregistre la localisation
         
     def load_points(self, tmx_data) -> None:
-        '''
-        Charge les points de trajectoires des NPCS Basiques
-        '''
+        """Charge les points de trajectoires des NPCS Basiques
+
+        Args:
+            tmx_data (_type_): données dans les fichier maps tmx
+        """
         for num in range(1, self.nb_points+1):
             point = tmx_data.get_object_by_name(f"{self.name}_path{num}")
             rect = py.Rect(point.x, point.y, point.width, point.height)

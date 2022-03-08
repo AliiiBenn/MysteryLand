@@ -37,6 +37,15 @@ class Animation(py.sprite.Sprite):
             self.clock = 0
             
     def get_images(self, y : int, debut : int, fin : int) -> list:
+        """obtient les images
+
+        Args:
+            y (int): ligne d'image
+            debut (int): debut de la ligné d'image
+            fin (int): fin de la ligné d'image
+        Returns:
+            list: liste des images
+        """
         images = []
         
         for i in range(debut, fin):
@@ -47,6 +56,15 @@ class Animation(py.sprite.Sprite):
         return images
         
     def get_image(self, x : int, y : int):
+        """obtient une image
+
+        Args:
+            x (int): _description_
+            y (int): _description_
+
+        Returns:
+            sprite: une image
+        """
         image = py.Surface([16, 32])
         image.blit(self.sprite_sheet, (0, 0), (x, y, 16, 32))
         return image
@@ -68,14 +86,20 @@ class Entity(Animation):
         self.direction = 0
         
     def update(self) -> None:
+        """met à jour
+        """
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
         self.idling()
         
     def save_location(self) -> None:
+        """sauvgarde la position
+        """
         self.old_position = self.position.copy()
         
     def idling(self) -> None:
+        """détermine la direction dans laquelle avance le perosnnage pour l'animation
+        """
         direction = {0 : 'right', 1 : 'up', 2 : 'left', 3 : 'down'}
         if not self.moving:
             self.change_animation(f'idle_{direction[self.direction]}')
@@ -196,6 +220,8 @@ class Entity(Animation):
             self.left()
 
     def move_back(self) -> None:
+        """reviens a la position precedente apres avoir heurter un bloc de type collision
+        """
         self.position = self.old_position
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
