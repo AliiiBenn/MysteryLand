@@ -22,11 +22,17 @@ class Button:
 
         Args:
             screen (py.display): screen sur lequel on va afficher le bouton
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         screen.blit(self.image, self.rect)
         
     def check_collisions(self) -> bool:
         """Renvoie True si il y a collision entre un bouton et la souris
+        
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             bool: collision entre le bouton et la souris
@@ -74,11 +80,14 @@ class InputBox:
                 self.txt_surface = self.FONT.render(self.text, True, self.color)
 
     def update(self, x, y) -> None:
-        """met à jour l'input box
+        """Met à jour l'input box
 
         Args:
             x (int): position en x
             y (int): position en y
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width 
@@ -89,6 +98,9 @@ class InputBox:
 
         Args:
             screen (py.display): l'ecran où l'input box va être affichée
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         py.draw.rect(screen, self.color, self.rect, 2)    
@@ -107,6 +119,9 @@ class Menu:
         Args:
             color (tuple): couleur du menu 
             in_game (bool, optional): Savoir si le joueur est en jeu. Defaults to False.
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         if not in_game:
             self.screen.fill(color)
@@ -129,6 +144,14 @@ class Menu:
                 return True
             
     def charger_menu_option(self):
+        """A faire
+
+        Args :
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            
+        """
         self.menu_option = py.image.load('img/option_menu.png')
         self.menu_option = py.transform.scale(self.menu_option, (self.screen.get_width() // 2, self.screen.get_height() // 2))
         self.menu_option.set_colorkey([255 , 0, 0])
@@ -137,6 +160,13 @@ class Menu:
         return self.menu_option_rect
     
     def mouse_collide_rect(self, tmx_data):
+        """A faire
+
+        Args :
+
+        Returns :
+        """
+
         mouse_pos = py.mouse.get_pos()
         for obj in tmx_data.objects:
             object_rect = py.Rect(obj.x * 2 + obj.width, obj.y * 2 + obj.height, obj.width, obj.height)
@@ -146,6 +176,14 @@ class Menu:
                 
             
     def creer_menu_options(self):
+        """Créé le menu d'options
+        
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
+        """
         map_data = pyscroll.data.TiledMapData(self.tmx_data)
         self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
         self.map_layer.zoom = 2
@@ -162,7 +200,13 @@ class NewPlayerMenu:
         self.user_input = InputBox(self.screen.get_width() / 2, self.screen.get_height() / 2, 400, 100, "")
         
     def create(self):
-        """Créer le menu de création de partie
+        """Créé le menu de création de partie
+        
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.screen.fill((0, 0, 255))
         self.user_input.update(self.screen.get_width() / 2, self.screen.get_height() / 2)

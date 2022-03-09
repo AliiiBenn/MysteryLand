@@ -20,6 +20,12 @@ class TiledEntity(py.sprite.Sprite):
         
     def update(self):
         """Méthode principale de la class TiledEntity, elle est utilisée pour regrouper les méthodes utilisées
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """ 
         self.animate()
     
@@ -56,7 +62,13 @@ class TiledEntity(py.sprite.Sprite):
         return image
     
     def animate(self):
-        """Méthode principale d'animation de la TiledEntity avec un compteur 
+        """Méthode principale d'animation de la TiledEntity avec un compteur
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.clock += 1
 

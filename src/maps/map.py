@@ -46,7 +46,13 @@ class MapManager:
     #             dialog_box.execute(sprite.dialog)
         
     def check_collisions(self) -> None:
-        """vérifie si il ya collision ou non 
+        """Vérifie si il ya collision ou non 
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         for portal in self.get_map().portals:
             if portal.from_world == self.current_map:
@@ -72,10 +78,13 @@ class MapManager:
                     sprite.move_back()
         
     def teleport_player(self, name : str) -> None:
-        """teleporte le joueur
+        """Teleporte le joueur
 
         Args:
             name (str): nom du joueur
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         point = self.get_object(name)
         self.player.position[0] = point.x
@@ -83,13 +92,16 @@ class MapManager:
         self.player.save_location()  
         
     def register_map(self, name : str, portals=[] , npcs=[], shops=[]) -> None:
-        """boucle principale générant les principales intervenants de la map
+        """Boucle principale générant les principales intervenants de la map
 
         Args:
             name (str): nom de la map
             portals (list, optional): portails présents sur la map. Defaults to [].
             npcs (list, optional): npcs présents sur la map. Defaults to [].
             shops (list, optional): shops présents sur la map. Defaults to [].
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         # charger la carte (tmx)
         tmx_data = pytmx.util_pygame.load_pygame(f'Maps/{name}.tmx')
@@ -126,7 +138,7 @@ class MapManager:
         self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, shops)
         
     def change_zoom(self, width: int, height: int) -> dict:
-        """change le zomm en fonction du pleine écran ou non
+        """Change le zomm en fonction du pleine écran ou non
 
         Args:
             width (int): dimension de le fenetre en largeur
@@ -139,7 +151,10 @@ class MapManager:
         return self.map_layer
         
     def get_map(self) -> dict:
-        """retourne juste la map actuel
+        """Retourne la map actuelle
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             dict: map actuel
@@ -147,7 +162,10 @@ class MapManager:
         return self.maps[self.current_map]
     
     def get_group(self) -> dict:
-        """retourne groupe de calques
+        """Retourne groupe de calques
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             dict: groupe de calques
@@ -155,7 +173,10 @@ class MapManager:
         return self.get_map().group
     
     def get_walls(self) -> dict:
-        """retourne groupe de murs
+        """Retourne groupe de murs
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             dict: groupe de murs
@@ -163,7 +184,7 @@ class MapManager:
         return self.get_map().walls
     
     def get_object(self, name: str) -> dict:
-        """recoit les objets par nom depuis le fichier tmx
+        """Recoit les objets par nom depuis le fichier tmx
 
         Args:
             name (str): nom des objets
@@ -174,7 +195,13 @@ class MapManager:
         return self.get_map().tmx_data.get_object_by_name(name)
     
     def teleport_npcs(self) -> None:
-        """teleport les non player characters
+        """Teleporte les PNJ
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         for map in self.maps:
             map_data = self.maps[map]
@@ -185,13 +212,25 @@ class MapManager:
                 npc.teleport_spawn()
     
     def draw(self) -> None:
-        """dessine la map
+        """Dessine la map
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.get_group().draw(self.screen)
         self.get_group().center(self.player.rect.center)
         
     def change_map(self) -> None:
-        """change la map
+        """Change la map
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         world = JM.open_file("saves")
         
@@ -200,7 +239,13 @@ class MapManager:
         JM.write_file("saves", world)
         
     def update(self) -> None:
-        """met a jour la map avec les npc
+        """Met a jour la map avec les npc
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.get_group().update()
         self.check_collisions()

@@ -33,11 +33,23 @@ class Game:
 
     def update(self) -> None:
         """Met à jour le système de map
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.map_manager.update()
         
     def initialise_game(self) -> None:
         """Lance le jeu avec le menu, le joueur et la map
+        
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         self.open_menu = True    
         self.player = player.Player(0, 0, 100)
@@ -45,6 +57,9 @@ class Game:
         
     def is_new_game(self) -> bool:
         """Regarde si la partie est nouvelle
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             bool: retourne un booleen qui correspond à l'etat de la partie, True si elle est nouvelle sinon False
@@ -56,6 +71,9 @@ class Game:
 
         Args:
             nickname (str): le nom du joueur
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         player = JM.open_file('saves')
         
@@ -80,6 +98,9 @@ class Game:
 
         Args:
             state (bool): Etat du jeu qui correspond à state 
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         new_game = JM.open_file('saves')
         new_game["player"]["new_game"] = state
@@ -87,6 +108,12 @@ class Game:
         
     def database_update_quitting(self) -> None:
         """Sauvegarde les données du joueur dans une base de donnée
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         informations = self.player_informations.get_json_informations()
         self.player_informations.update_user_informations(
@@ -99,6 +126,9 @@ class Game:
         
     def check_internet_connection(self) -> bool:
         """Fais une requette internet pour savoir si l'ordinateur est connecté à internet
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             bool: renvoie l'état de la connexion, True si connecté sinon False
@@ -113,6 +143,12 @@ class Game:
         
     def ouvrir_menu(self) -> None:
         """Ouvre le menu
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         if not self.playing:
             self.menu.creer((0, 0, 255))
@@ -124,6 +160,12 @@ class Game:
             
     def quit_game(self) -> None:
         """Méthode pour quitter le jeu et faire toutes les mises à jour nécéssaires
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         if self.playing:
             self.player.change_player_position()
@@ -135,6 +177,13 @@ class Game:
     
     def handle_input(self) -> None:
         """Méthode qui gère toutes les entrées clavier du joueur
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
+        
         """
         pressed = py.key.get_pressed()
         
@@ -166,6 +215,13 @@ class Game:
 
     def run(self) -> None:
         """Méthode principale qui lance le jeu
+
+        Args:
+            La fonction ne prends aucun argument --> None
+        
+        Retruns :
+            La fonction ne retourne rien --> None
+
         """
         running = True
         while running:

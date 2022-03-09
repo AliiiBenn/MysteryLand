@@ -23,6 +23,12 @@ class Basicnpc(NPC):
         
     def move(self) -> None:
         """Définie la trajectoire des NPCS basiques
+        
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None 
         """
         current_point = self.current_point
         target_point = self.current_point + 1
@@ -48,6 +54,12 @@ class Basicnpc(NPC):
 
     def teleport_spawn(self) -> None:
         """Place le NPC sur le point de spawn de la dernière position (ou de la position de base si 1ère partie)
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         location = self.points[self.current_point]
         self.position[0] = location.x
@@ -59,6 +71,9 @@ class Basicnpc(NPC):
 
         Args:
             tmx_data (_type_): données dans les fichier maps tmx
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         for num in range(1, self.nb_points+1):
             point = tmx_data.get_object_by_name(f"{self.name}_path{num}")

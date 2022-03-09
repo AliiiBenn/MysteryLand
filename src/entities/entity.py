@@ -26,7 +26,8 @@ class Animation(py.sprite.Sprite):
         Args :
             animation_name (str) : nom de l'animation
             
-        Returns : None
+        Returns :
+            La fonction ne retourne rien --> None
         '''
         self.image = self.images[animation_name][self.animation_index]
         # self.image = py.transform.scale(self.image, (int(self.image.get_width() * self.scale), int(self.image.get_height() * self.scale)))
@@ -70,7 +71,7 @@ class Animation(py.sprite.Sprite):
             x (int): _description_
             y (int): _description_
 
-        Return:
+        Returns:
             sprite: une image
         """
         image = py.Surface([16, 32])
@@ -96,8 +97,11 @@ class Entity(Animation):
     def update(self) -> None:
         """Met à jour la page: update
 
-        Return :
-            None        
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None       
         """
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
@@ -106,16 +110,22 @@ class Entity(Animation):
     def save_location(self) -> None:
         """Sauvgarde la position
 
+        Args:
+            La fonction ne prends aucun argument --> None
+
         Returns :
-            None  
+            La fonction ne retourne rien --> None  
         """
         self.old_position = self.position.copy()
         
     def idling(self) -> None:
         """Détermine la direction dans laquelle avance le perosnnage pour l'animation
 
+        Args:
+            La fonction ne prends aucun argument --> None
+
         Returns :
-            None  
+            La fonction ne retourne rien --> None 
         """
         direction = {0 : 'right', 1 : 'up', 2 : 'left', 3 : 'down'}
         if not self.moving:
@@ -238,9 +248,11 @@ class Entity(Animation):
 
     def move_back(self) -> None:
         """Reviens a la position precedente apres avoir heurter un bloc de type collision
-
+        Args:
+            None
+        
         Returns :
-            None  
+            La fonction ne retourne rien --> None  
         """
         self.position = self.old_position
         self.rect.topleft = self.position

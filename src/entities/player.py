@@ -12,7 +12,10 @@ class Player(Entity):
         
     @staticmethod
     def get_position():
-        """obtient la position du joueur
+        """Obtient la position du joueur
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             _type_: position du joueur
@@ -22,7 +25,13 @@ class Player(Entity):
         return player_position
     
     def change_player_position(self):
-        """change la position du joueur
+        """Change la position du joueur
+
+        Args:
+            La fonction ne prends aucun argument --> None
+
+        Returns :
+            La fonction ne retourne rien --> None
         """
         current_player_position = [self.rect.x, self.rect.y]
         player_p = JM.open_file("saves")
@@ -33,7 +42,10 @@ class Player(Entity):
         
     @staticmethod
     def get_life() -> int:
-        """va chercher la vie du joueur dans le fichier save et la return
+        """Cherche la vie du joueur dans le fichier "saves.json" et la return
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             _type_: retourne la vie acuel du joueur
@@ -43,10 +55,13 @@ class Player(Entity):
         return life
     
     def change_player_life(self, life: int):
-        """va écrire dans le fichier save la vie du joueur
+        """Ecrit dans le fichier "saves.json" la vie du joueur
 
         Args:
             life (int): vie du joueur entre 0 et 100
+            
+        Returns :
+            La fonction ne retourne rien --> None
         """
         player_l = JM.open_file("saves")
         
@@ -55,7 +70,10 @@ class Player(Entity):
         JM.write_file('saves', player_l)
         
     def is_player_dead(self):
-        """voit si le joueur est mort
+        """Vérifie si le joueur est mort
+
+        Args:
+            La fonction ne prends aucun argument --> None
 
         Returns:
             _type_: 0 si mort, life <= 0
@@ -91,8 +109,11 @@ class PlayerInformation(DatabaseLink):
         })
         
     def get_json_informations(self):
-        """obtient les informations depuis le json
+        """Obtient les informations depuis le json
 
+        Args:
+            La fonction ne prends aucun argument --> None
+            
         Returns:
             _type_: return les information précise concernant le joueur, méthode utilisée par les autres en haut
         """
