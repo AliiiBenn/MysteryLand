@@ -21,6 +21,13 @@ class Animation(py.sprite.Sprite):
         }
         
     def change_animation(self, animation_name : str) -> None:
+        '''Charge l'image suivante de l'animation "animation_name".
+        
+        Args :
+            animation_name (str) : nom de l'animation
+            
+        Returns : None
+        '''
         self.image = self.images[animation_name][self.animation_index]
         # self.image = py.transform.scale(self.image, (int(self.image.get_width() * self.scale), int(self.image.get_height() * self.scale)))
         
@@ -37,12 +44,13 @@ class Animation(py.sprite.Sprite):
             self.clock = 0
             
     def get_images(self, y : int, debut : int, fin : int) -> list:
-        """obtient les images
+        """Obtient les images
 
         Args:
             y (int): ligne d'image
             debut (int): debut de la ligné d'image
             fin (int): fin de la ligné d'image
+
         Returns:
             list: liste des images
         """
@@ -56,13 +64,13 @@ class Animation(py.sprite.Sprite):
         return images
         
     def get_image(self, x : int, y : int):
-        """obtient une image
+        """Obtient une image
 
         Args:
             x (int): _description_
             y (int): _description_
 
-        Returns:
+        Return:
             sprite: une image
         """
         image = py.Surface([16, 32])
@@ -86,19 +94,28 @@ class Entity(Animation):
         self.direction = 0
         
     def update(self) -> None:
-        """met à jour
+        """Met à jour la page: update
+
+        Return :
+            None        
         """
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
         self.idling()
         
     def save_location(self) -> None:
-        """sauvgarde la position
+        """Sauvgarde la position
+
+        Returns :
+            None  
         """
         self.old_position = self.position.copy()
         
     def idling(self) -> None:
-        """détermine la direction dans laquelle avance le perosnnage pour l'animation
+        """Détermine la direction dans laquelle avance le perosnnage pour l'animation
+
+        Returns :
+            None  
         """
         direction = {0 : 'right', 1 : 'up', 2 : 'left', 3 : 'down'}
         if not self.moving:
@@ -220,7 +237,10 @@ class Entity(Animation):
             self.left()
 
     def move_back(self) -> None:
-        """reviens a la position precedente apres avoir heurter un bloc de type collision
+        """Reviens a la position precedente apres avoir heurter un bloc de type collision
+
+        Returns :
+            None  
         """
         self.position = self.old_position
         self.rect.topleft = self.position
