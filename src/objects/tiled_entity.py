@@ -22,7 +22,7 @@ class TiledEntity(py.sprite.Sprite):
         """Méthode principale de la class TiledEntity, elle est utilisée pour regrouper les méthodes utilisées
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -65,7 +65,7 @@ class TiledEntity(py.sprite.Sprite):
         """Méthode principale d'animation de la TiledEntity avec un compteur
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None

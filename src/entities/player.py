@@ -28,7 +28,7 @@ class Player(Entity):
         """Change la position du joueur
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -45,7 +45,7 @@ class Player(Entity):
         """Cherche la vie du joueur dans le fichier "saves.json" et la return
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns:
             _type_: retourne la vie acuel du joueur
@@ -73,7 +73,7 @@ class Player(Entity):
         """Vérifie si le joueur est mort
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns:
             _type_: 0 si mort, life <= 0
@@ -112,7 +112,7 @@ class PlayerInformation(DatabaseLink):
         """Obtient les informations depuis le json
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
             
         Returns:
             _type_: return les information précise concernant le joueur, méthode utilisée par les autres en haut

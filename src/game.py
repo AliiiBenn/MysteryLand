@@ -35,7 +35,7 @@ class Game:
         """Met à jour le système de map
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -46,7 +46,7 @@ class Game:
         """Lance le jeu avec le menu, le joueur et la map
         
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -59,7 +59,7 @@ class Game:
         """Regarde si la partie est nouvelle
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns:
             bool: retourne un booleen qui correspond à l'etat de la partie, True si elle est nouvelle sinon False
@@ -110,7 +110,7 @@ class Game:
         """Sauvegarde les données du joueur dans une base de donnée
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -127,8 +127,8 @@ class Game:
     def check_internet_connection(self) -> bool:
         """Fais une requette internet pour savoir si l'ordinateur est connecté à internet
 
-        Args:
-            La fonction ne prends aucun argument --> None
+        Args
+            La fonction ne prends aucun argument
 
         Returns:
             bool: renvoie l'état de la connexion, True si connecté sinon False
@@ -145,7 +145,7 @@ class Game:
         """Ouvre le menu
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -162,7 +162,7 @@ class Game:
         """Méthode pour quitter le jeu et faire toutes les mises à jour nécéssaires
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -179,7 +179,7 @@ class Game:
         """Méthode qui gère toutes les entrées clavier du joueur
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -217,7 +217,7 @@ class Game:
         """Méthode principale qui lance le jeu
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
         
         Retruns :
             La fonction ne retourne rien --> None

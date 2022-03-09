@@ -68,8 +68,8 @@ class Animation(py.sprite.Sprite):
         """Obtient une image
 
         Args:
-            x (int): _description_
-            y (int): _description_
+            x (int): position x de l'image
+            y (int): position y de l'image
 
         Returns:
             sprite: une image
@@ -95,10 +95,10 @@ class Entity(Animation):
         self.direction = 0
         
     def update(self) -> None:
-        """Met à jour la page: update
+        """Met à jour la page
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None       
@@ -111,7 +111,7 @@ class Entity(Animation):
         """Sauvgarde la position
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None  
@@ -119,10 +119,10 @@ class Entity(Animation):
         self.old_position = self.position.copy()
         
     def idling(self) -> None:
-        """Détermine la direction dans laquelle avance le perosnnage pour l'animation
+        """Détermine la direction dans laquelle avance le personnage pour l'animation
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None 
@@ -141,7 +141,7 @@ class Entity(Animation):
         """Fonction qui permet le deplacement haut et diagonale haut (dans les deux directions)
 
         Args:
-            param1: diagonale (False par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas
 
         Returns:
             La fonction ne retourne rien --> None
@@ -158,7 +158,7 @@ class Entity(Animation):
         """Fonction qui permet le deplacement bas et diagonale bas (dans les deux directions)
 
         Args:
-            param1: diagonale (False par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas
 
         Returns:
             La fonction ne retourne rien --> None
@@ -174,7 +174,7 @@ class Entity(Animation):
         """Fonction qui permet le deplacement à droite (plus ou moins vite si le joueur se déplace en diagonale)
 
         Args:
-            param1: diagonale (False par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas
 
         Returns:
             La fonction ne retourne rien --> None
@@ -191,7 +191,7 @@ class Entity(Animation):
         """Fonction qui permet le deplacement à gauche (plus ou moins vite si le joueur se déplace en diagonale)
 
         Args:
-            param1: diagonale (False par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas
 
         Returns:
             La fonction ne retourne rien --> None
@@ -211,7 +211,7 @@ class Entity(Animation):
         '' = right (droite sans diagonale)
 
         Args:
-            param1: diagonale ('' par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas et sa direction
 
         Returns:
             La fonction ne retourne rien --> None
@@ -232,7 +232,7 @@ class Entity(Animation):
         '' = left (gauche sans diagonale)
 
         Args:
-            param1: diagonale ('' par défaut)
+            diagonale (bool : False par défaut) : indique si le déplacement est en mode diagonale ou pas et sa direction
 
         Returns:
             La fonction ne retourne rien --> None
@@ -248,8 +248,9 @@ class Entity(Animation):
 
     def move_back(self) -> None:
         """Reviens a la position precedente apres avoir heurter un bloc de type collision
+
         Args:
-            None
+            La fonction ne prends en compte aucun argument
         
         Returns :
             La fonction ne retourne rien --> None  

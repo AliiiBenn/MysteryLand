@@ -25,7 +25,7 @@ class Basicnpc(NPC):
         """Définie la trajectoire des NPCS basiques
         
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None 
@@ -56,7 +56,7 @@ class Basicnpc(NPC):
         """Place le NPC sur le point de spawn de la dernière position (ou de la position de base si 1ère partie)
 
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None

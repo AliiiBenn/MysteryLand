@@ -32,7 +32,7 @@ class Button:
         """Renvoie True si il y a collision entre un bouton et la souris
         
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns:
             bool: collision entre le bouton et la souris
@@ -147,7 +147,7 @@ class Menu:
         """A faire
 
         Args :
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             
@@ -179,7 +179,7 @@ class Menu:
         """Créé le menu d'options
         
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
@@ -203,7 +203,7 @@ class NewPlayerMenu:
         """Créé le menu de création de partie
         
         Args:
-            La fonction ne prends aucun argument --> None
+            La fonction ne prends aucun argument
 
         Returns :
             La fonction ne retourne rien --> None
