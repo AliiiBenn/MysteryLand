@@ -3,7 +3,7 @@ import requests
 import entities.player as player
 from database_management.json_management import JsonManagement as JM
 from maps.map import MapManager
-from widgets.menu import Menu, NewPlayerMenu
+from widgets import Menu, NewPlayerMenu
 
 # test
 CLOCK = py.time.Clock()

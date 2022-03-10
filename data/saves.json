@@ -2,14 +2,14 @@
     "player": {
         "new_game": false,
         "position": [
-            698,
-            1054
+            6500,
+            6500
         ],
         "life": 100,
         "current_world": "World",
         "database_data": {
             "dungeons": 0,
-            "nickname": "SID",
+            "nickname": "AliBen",
             "money": 0,
             "level": [
                 0,
