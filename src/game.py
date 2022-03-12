@@ -2,8 +2,9 @@ import pygame as py
 import requests
 import entities.player as player
 from database_management.json_management import JsonManagement as JM
-from maps.map import MapManager
+from maps import MapManager
 from widgets import Menu, NewPlayerMenu
+from maps import Checkpoints
 
 # test
 CLOCK = py.time.Clock()
@@ -227,16 +228,19 @@ class Game:
         while running:
             CLOCK.tick(FPS)
             
-            
+            current_map = self.map_manager.get_map()
+            checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
+            # for checkpoint in checkpoints:
+            #     print(checkpoint.name)
+
+            if self.player.is_dead():
+                Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
+                self.player.life = 100
             
             if self.playing:
                 self.player.save_location()
                 self.update()
                 self.map_manager.draw()
-                
-                if self.player.is_player_dead():
-                    self.player.change_player_life(100)
-                    running = False
             
             elif self.is_new_game():
                 self.new_player_menu.create()

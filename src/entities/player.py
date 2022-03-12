@@ -69,7 +69,7 @@ class Player(Entity):
         
         JM.write_file('saves', player_l)
         
-    def is_player_dead(self):
+    def is_dead(self):
         """Vérifie si le joueur est mort
 
         Args:
