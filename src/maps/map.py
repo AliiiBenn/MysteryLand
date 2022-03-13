@@ -26,9 +26,10 @@ class Map:
     shops : list[ShopNPC]
     
 class MapManager:
-    def __init__(self, screen: int, player : str):
+    def __init__(self, screen: int, player : str, ennemies_list):
         self.screen = screen
         self.player = player
+        self.ennemies_list = ennemies_list
         self.maps = dict()
         self.current_map = JM.get_specific_information('["player"]["current_world"]')
         
@@ -129,6 +130,7 @@ class MapManager:
         for b in AnimatedTile:
             group.add(b)
         group.add(self.player)
+        group.add(self.ennemies_list)
         
         
         for npc in npcs:

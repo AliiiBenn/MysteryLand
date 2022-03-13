@@ -1,5 +1,6 @@
 import pygame as py
 import requests
+from entities.enemies import Enemies
 import entities.player as player
 from database_management.json_management import JsonManagement as JM
 from maps import MapManager
@@ -54,7 +55,8 @@ class Game:
         """
         self.open_menu = True    
         self.player = player.Player(0, 0, 100)
-        self.map_manager = MapManager(self.screen, self.player)
+        self.ennemy = Enemies(6500, 6500, 'Amelia', 0.3, self.screen)
+        self.map_manager = MapManager(self.screen, self.player, self.ennemy)
         
     def is_new_game(self) -> bool:
         """Regarde si la partie est nouvelle
@@ -230,8 +232,7 @@ class Game:
             
             current_map = self.map_manager.get_map()
             checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
-            # for checkpoint in checkpoints:
-            #     print(checkpoint.name)
+            
 
             if self.player.is_dead():
                 Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
@@ -241,6 +242,8 @@ class Game:
                 self.player.save_location()
                 self.update()
                 self.map_manager.draw()
+                self.ennemy.is_entity_visible(self.player)
+                # self.ennemy.damage_entity(self.player)
             
             elif self.is_new_game():
                 self.new_player_menu.create()

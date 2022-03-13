@@ -8,7 +8,7 @@ class Animation(py.sprite.Sprite):
         self.sprite_sheet = py.image.load(f"img/{sprite}_16x16.png")
         self.animation_index = 0
         self.clock = 0
-        self.speed = 2
+        self.animation_speed = 2
         self.images = {
             'idle_right' : self.get_images(32, 0, 6),
             'idle_up' : self.get_images(32, 6, 12),
@@ -33,7 +33,7 @@ class Animation(py.sprite.Sprite):
         # self.image = py.transform.scale(self.image, (int(self.image.get_width() * self.scale), int(self.image.get_height() * self.scale)))
         
         self.image.set_colorkey([0, 0, 0])
-        self.clock += self.speed *  8
+        self.clock += self.animation_speed *  8
         
         
         if self.clock >= 100:
@@ -93,6 +93,7 @@ class Entity(Animation):
         self.old_position = self.position.copy()
         self.moving = False
         self.direction = 0
+        self.speed = 2
         
     def update(self) -> None:
         """Met à jour la page
@@ -117,6 +118,9 @@ class Entity(Animation):
             La fonction ne retourne rien --> None  
         """
         self.old_position = self.position.copy()
+        
+    def check_entity_collision(self, entity):
+        return py.Rect.colliderect(self.rect, entity.rect)
         
     def idling(self) -> None:
         """Détermine la direction dans laquelle avance le personnage pour l'animation

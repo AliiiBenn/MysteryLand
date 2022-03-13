@@ -1,6 +1,57 @@
-#import pygame as py
-#from player import Entity
+import pygame as py
+from .entity import Entity
+import math
 
-#class Enemies(py.sprite.Sprite):
-#    def __init__(self, x, y, sprite):
-#        super().__init__(x, y, 0.65, sprite)
+class Enemies(Entity):
+    def __init__(self, x : int, y : int, sprite : str, attack : float, screen):
+        super().__init__(x, y, sprite)
+        self.attack = attack
+        self.screen = screen
+        self.vision = py.Rect(self.rect.x, self.rect.y, 200 , 200)
+        self.vision.center = (self.position[0], self.position[1])
+        
+    def update_vision_rect(self):
+        self.vision = py.Rect(self.rect.x, self.rect.y, 300, 300)
+        self.vision.center = (self.position[0], self.position[1])
+        
+    def is_entity_visible(self, entity : Entity):
+        self.update_vision_rect()
+        if py.Rect.colliderect(entity.rect, self.vision):
+            self.follow_entity(entity)
+            
+    def damage_entity(self, entity):
+        if self.check_entity_collision(entity):
+            entity.life -= self.attack
+            
+    def animate_ennemy(self, old_position):
+        if old_position[0] < self.position[0]:
+            self.moving, self.direction = True, 0
+            self.change_animation('walk_right')
+        elif old_position[0] > self.position[0]:
+            self.moving, self.direction = True, 2
+            self.change_animation('walk_left')
+        if old_position[1] < self.position[1]:
+            self.moving, self.direction = True, 3
+            self.change_animation('walk_down')
+        elif old_position[1] > self.position[1]:
+            self.moving, self.direction = True, 1
+            self.change_animation('walk_up')
+        else:
+            self.moving = False
+        
+    def follow_entity(self, entity : Entity) -> None:
+        dx, dy = entity.position[0] - self.position[0], entity.position[1] - self.position[1]
+        dist = math.hypot(dx, dy)
+        dx, dy = dx / dist, dy / dist
+        print('----------------------')
+        print(dist)
+        old_position = [self.position[0], self.position[1]]
+        print(self.position[0], self.position[1])
+        self.position[0] += dx * (self.speed / 1.3)
+        self.position[1] += dy * (self.speed / 1.3)
+        print(self.position[0], self.position[1])
+        print('----------------------')
+        self.animate_ennemy(old_position)
+        
+            
+        
