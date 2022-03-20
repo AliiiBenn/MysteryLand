@@ -243,7 +243,6 @@ class Game:
                 self.update()
                 self.map_manager.draw()
                 self.ennemy.is_entity_visible(self.player)
-                # self.ennemy.damage_entity(self.player)
             
             elif self.is_new_game():
                 self.new_player_menu.create()
