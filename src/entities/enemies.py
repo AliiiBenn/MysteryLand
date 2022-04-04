@@ -20,6 +20,7 @@ class Enemies(Entity):
         self.update_vision_rect()
         if py.Rect.colliderect(entity.rect, self.vision):
             self.follow_entity(entity)
+            self.damage_entity(entity)
         else:
             self.ai()
             

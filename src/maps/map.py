@@ -24,7 +24,7 @@ class Map:
     portals : list[Portal]
     npcs : list[Basicnpc]
     shops : list[ShopNPC]
-    
+
 class MapManager:
     def __init__(self, screen: int, player : str, ennemies_list):
         self.screen = screen
@@ -33,9 +33,9 @@ class MapManager:
         self.maps = dict()
         self.current_map = JM.get_specific_information('["player"]["current_world"]')
         
-        self.register_map("World")
+        self.register_map("World_Alpha")
         
-        if self.current_map == "World":
+        if self.current_map == "World_Alpha":
             self.player.position = Player.get_position()
         else:
             self.teleport_player('player')
@@ -126,7 +126,7 @@ class MapManager:
                 
         
         # dessiner le groupe de calque
-        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=6)
+        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=2)
         for b in AnimatedTile:
             group.add(b)
         group.add(self.player)

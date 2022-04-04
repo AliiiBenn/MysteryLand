@@ -1,38 +1,50 @@
+import inspect
 import pygame as py
 import requests
+import pygame_widgets
 from entities.enemies import Enemies
-import entities.player as player
+from entities.player import Player, PlayerInformation, NewPlayer
 from database_management.json_management import JsonManagement as JM
 from maps import MapManager
-from widgets import Menu, NewPlayerMenu
+from widgets import Menu, NewPlayerMenu, PlayerGui
 from maps import Checkpoints
+from objects import QuestsSystem
 
-# test
 CLOCK = py.time.Clock()
 FPS = 60
 
-class Game:
+class NewGame:
     def __init__(self):
-        screen_width, screen_height = 1200, 600
-        self.screen = py.display.set_mode((screen_width, screen_height), py.RESIZABLE)
-        py.display.set_caption("MysteryLand")
-        
-        self.player_informations = player.PlayerInformation()
+        pass
 
-        icon = py.image.load('img/logo.png')
-        py.display.set_icon(icon)
+class Game:
+    def __init__(self, screen_width: int, screen_height: int):
+        self._screen_width = screen_width
+        self._screen_height = screen_height
+        self.screen = self.create_screen()
         
-        self.playing = False
-        self.open_menu = False
-        self.option_open = False
-        self.new_player_menu = NewPlayerMenu(self.screen)
+        self.player_informations = PlayerInformation()
+        self.new_player_menu = NewPlayerMenu(self.screen, self)
+        self.quests_system = QuestsSystem(self.screen)
         self.menu = Menu(self.screen)
         
-                
-        if not self.is_new_game():
-            self.initialise_game()
+        
+        self.playing = False
+        self.open_menu = True
+        self.option_open = False
+        self.open_quest_menu = False
+        
+        # if not self.is_new_game():
+        #     self.initialise_game()
+            
+    @property
+    def screen_width(self) -> int:
+        return self._screen_width
 
-
+    @property
+    def screen_height(self) -> int:
+        return self._screen_height
+    
     def update(self) -> None:
         """Met à jour le système de map
 
@@ -43,7 +55,14 @@ class Game:
             La fonction ne retourne rien --> None
         """
         self.map_manager.update()
-        
+    
+    def create_screen(self) -> None:
+        screen = py.display.set_mode((self._screen_width, self._screen_height), py.RESIZABLE)
+        py.display.set_caption("MysteryLand")
+        icon = py.image.load('img/logo.png')
+        py.display.set_icon(icon)
+        return screen
+
     def initialise_game(self) -> None:
         """Lance le jeu avec le menu, le joueur et la map
         
@@ -53,9 +72,9 @@ class Game:
         Returns :
             La fonction ne retourne rien --> None
         """
-        self.open_menu = True    
-        self.player = player.Player(0, 0, 100)
-        self.ennemy = Enemies(6500, 6500, 'Amelia', 0.3, self.screen)
+        self.player = Player(0, 0, 100)
+        self.player_gui = PlayerGui(self.screen, self.player)
+        self.ennemy = Enemies(100, 100, 'Amelia', 0.3, self.screen)
         self.map_manager = MapManager(self.screen, self.player, self.ennemy)
         
     def is_new_game(self) -> bool:
@@ -68,33 +87,6 @@ class Game:
             bool: retourne un booleen qui correspond à l'etat de la partie, True si elle est nouvelle sinon False
         """
         return JM.get_specific_information('["player"]["new_game"]')
-        
-    def new_player(self, nickname: str) -> None:
-        """Créer un nouveau joueur dans le fichier saves.json
-
-        Args:
-            nickname (str): le nom du joueur
-
-        Returns :
-            La fonction ne retourne rien --> None
-        """
-        player = JM.open_file('saves')
-        
-        player["player"].update({
-            "position" : [0, 0],
-            "life" : 100,
-            "current_world" : "World",
-            "database_data" : {
-                "dungeons" : 0,
-                "nickname" : nickname,
-                "money" : 0,
-                "level" : [0, 0]
-            }
-            
-        })
-        
-        self.player_informations.update_user_informations(nickname, 0, 0, 0, 0)
-        JM.write_file('saves', player)
         
     def change_game_status(self, state : bool) -> None:
         """Change l'état du jeu quand une nouvelle partie est créee
@@ -153,13 +145,17 @@ class Game:
         Returns :
             La fonction ne retourne rien --> None
         """
-        if not self.playing:
-            self.menu.creer((0, 0, 255))
-            self.playing = self.menu.check_state('play')
-            self.open_menu = not self.menu.check_state('play')
-        else:
-            self.menu.creer((0, 0, 255), True)
-            self.open_menu = not self.menu.check_state('play')
+        if not self.is_new_game():
+            if not self.playing:
+                self.menu.creer((0, 0, 255))
+                if self.menu.check_state('play'):
+                    self.initialise_game()
+                    self.playing = True
+                # self.playing = self.menu.check_state('play')
+                self.open_menu = not self.menu.check_state('play')
+            else:
+                self.menu.creer((0, 0, 255), True)
+                self.open_menu = not self.menu.check_state('play')
             
     def quit_game(self) -> None:
         """Méthode pour quitter le jeu et faire toutes les mises à jour nécéssaires
@@ -175,6 +171,13 @@ class Game:
             self.player.change_player_life(self.player.life)
             if self.check_internet_connection:
                 self.database_update_quitting()
+                
+    def create_new_player(self):
+        # on lance la fonction directement dans le widget
+        if self.is_new_game():
+            NewPlayer.create_new_player_informations(self.new_player_menu.box.getText(), self.player_informations)
+            self.change_game_status(False)
+            self.initialise_game()
 
             
     
@@ -211,8 +214,13 @@ class Game:
                 self.player.right()
             elif pressed[py.K_e]:
                 self.player.life -= 10
+            elif pressed[py.K_f]:
+                self.open_quest_menu = True
             elif pressed[py.K_ESCAPE]:
-                self.open_menu = True
+                if self.open_quest_menu:
+                    self.open_quest_menu = False
+                else:
+                    self.open_menu = True
             else:
                 self.player.moving = False
 
@@ -223,29 +231,43 @@ class Game:
             La fonction ne prends aucun argument
         
         Retruns :
-            La fonction ne retourne rien --> None
+            La fonction ne retourne rien -> None
 
         """
         running = True
         while running:
             CLOCK.tick(FPS)
             
-            current_map = self.map_manager.get_map()
-            checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
             
-
-            if self.player.is_dead():
-                Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
-                self.player.life = 100
             
             if self.playing:
+                
                 self.player.save_location()
                 self.update()
                 self.map_manager.draw()
                 self.ennemy.is_entity_visible(self.player)
+                
+                current_map = self.map_manager.get_map()
+                checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
+                
+                
+                
+                self.quests_system.create_new_quests("Tuer 30 monstres", (100, 100), 40, True)
+                self.quests_system.create_new_quests("Aller au donjon", (100, 100), 40, True)
+                    
+                self.player_gui.display_life()
+                if self.open_quest_menu:
+                    self.player_gui.display_quest_menu()
+                    for index, quest in enumerate(self.quests_system.quests_dict):
+                        self.quests_system.display_quest(quest, self.screen.get_width() / 2 - 300, self.screen.get_height() / 3 + (index * 40))
+
+                if self.player.is_dead():
+                    Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
+                    self.player.life = 100
             
             elif self.is_new_game():
                 self.new_player_menu.create()
+                pygame_widgets.update(py.event.get())
                     
                     
             if self.open_menu:
@@ -268,13 +290,4 @@ class Game:
                     if self.playing:
                         self.map_manager.change_zoom(event.size[0], event.size[1])
                         
-                if self.is_new_game():
-                    enter_key_pressed = self.new_player_menu.user_input.handle_event(event)
-                    if enter_key_pressed:
-                        self.new_player(str(enter_key_pressed[1]))
-                        self.change_game_status(False)
-                        self.initialise_game()
-
-            
-
         py.quit()

@@ -118,3 +118,38 @@ class PlayerInformation(DatabaseLink):
             _type_: return les information précise concernant le joueur, méthode utilisée par les autres en haut
         """
         return JM.get_specific_information('["player"]["database_data"]')
+
+
+class NewPlayer:
+    def __init__(self, player):
+        self.player = player
+        
+    def create_new_player_informations(nickname, player_informations):
+        """Créer un nouveau joueur dans le fichier saves.json
+
+        Args:
+            nickname (str): le nom du joueur
+
+        Returns :
+            La fonction ne retourne rien --> None
+        """
+        player = JM.open_file('saves')
+        
+        player["player"].update({
+            "position" : [0, 0],
+            "life" : 100,
+            "current_world" : "World_Alpha",
+            "database_data" : {
+                "dungeons" : 0,
+                "nickname" : nickname,
+                "money" : 0,
+                "level" : [0, 0],
+                "quests" : {
+                    
+                }
+            }
+            
+        })
+        
+        player_informations.update_user_informations(nickname, 0, 0, 0, 0)
+        JM.write_file('saves', player)

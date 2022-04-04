@@ -17,7 +17,6 @@ class Checkpoint:
 #         self.height = height
 #         self.name = name
         
-
 class Checkpoints:
     def get_checkpoints(tmx_data) -> list[Checkpoint]:
         checkpoints_list = []
@@ -70,3 +69,4 @@ class Checkpoints:
         """
         closest_checkpoint = Checkpoints.check_closest_checkpoint(entity, checkpoint_list)
         entity.position[0], entity.position[1] = closest_checkpoint.x, closest_checkpoint.y
+

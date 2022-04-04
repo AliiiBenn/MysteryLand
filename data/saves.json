@@ -2,11 +2,11 @@
     "player": {
         "new_game": false,
         "position": [
-            6009,
-            6816
+            3632,
+            2120
         ],
         "life": 100,
-        "current_world": "World",
+        "current_world": "World_Alpha",
         "database_data": {
             "dungeons": 0,
             "nickname": "AliBen",
@@ -14,7 +14,25 @@
             "level": [
                 0,
                 0
-            ]
+            ],
+            "quests": {
+                "Tuer 30 monstres": {
+                    "Tuer 30 monstres": "Tuer 30 monstres",
+                    "position": [
+                        100,
+                        100
+                    ],
+                    "xp": 40
+                },
+                "Aller au donjon": {
+                    "Aller au donjon": "Aller au donjon",
+                    "position": [
+                        100,
+                        100
+                    ],
+                    "xp": 40
+                }
+            }
         }
     }
 }
