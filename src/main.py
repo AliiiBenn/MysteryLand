@@ -8,4 +8,3 @@ if __name__ == '__main__':
     py.font.init()
     game = Game(1200, 600)
     game.run()
-    

@@ -243,6 +243,7 @@ class Game:
             if self.playing:
                 
                 self.player.save_location()
+                self.handle_input()
                 self.update()
                 self.map_manager.draw()
                 self.ennemy.is_entity_visible(self.player)
@@ -250,7 +251,7 @@ class Game:
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
                 
-                
+
                 
                 self.quests_system.create_new_quests("Tuer 30 monstres", (100, 100), 40, True)
                 self.quests_system.create_new_quests("Aller au donjon", (100, 100), 40, True)
@@ -277,7 +278,7 @@ class Game:
                     running = False
                 
                 
-            self.handle_input()
+            
             py.display.flip()
             for event in py.event.get():
                 if event.type == py.QUIT:

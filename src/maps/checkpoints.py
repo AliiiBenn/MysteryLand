@@ -21,7 +21,7 @@ class Checkpoints:
     def get_checkpoints(tmx_data) -> list[Checkpoint]:
         checkpoints_list = []
         for obj in tmx_data.objects:
-            if "checkpoint" in obj.name:
+            if not obj.name is None and "checkpoint" in obj.name:
                 checkpoints_list.append(Checkpoint(obj.x, obj.y, obj.width, obj.height, obj.name))
         return checkpoints_list
     

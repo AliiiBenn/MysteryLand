@@ -85,8 +85,6 @@ class Entity(Animation):
         self.x = x
         self.y = y
         self.image = py.Surface([16, 32])
-        # self.image = py.transform.scale(self.image, (int(self.image.get_width() * self.scale), int(self.image.get_height() * self.scale)))
-        # self.image.set_colorkey([0, 0, 0])
         self.rect = self.image.get_rect()
         self.position = [x, y]
         self.feet = py.Rect(0, 0, self.rect.width * 0.5, 12)
@@ -252,6 +250,7 @@ class Entity(Animation):
 
     def move_back(self) -> None:
         """Reviens a la position precedente apres avoir heurter un bloc de type collision
+        
 
         Args:
             La fonction ne prends en compte aucun argument
@@ -261,6 +260,5 @@ class Entity(Animation):
         """
         self.position = self.old_position
         self.rect.topleft = self.position
-        self.feet.midbottom = self.rect.midbottom
-        
+        self.feet.midbottom = self.rect.midbottom        
     

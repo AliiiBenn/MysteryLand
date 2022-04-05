@@ -36,7 +36,8 @@ class MapManager:
         self.register_map("World_Alpha")
         
         if self.current_map == "World_Alpha":
-            self.player.position = Player.get_position()
+            self.player.position[0], self.player.position[1] = Player.get_position()
+            self.player.save_location()  
         else:
             self.teleport_player('player')
         self.teleport_npcs()
@@ -68,12 +69,8 @@ class MapManager:
                     
                     
         for sprite in self.get_group().sprites():
-            
             if type(sprite) is Basicnpc:
-                if sprite.feet.colliderect(self.player.rect):
-                    sprite.speed = 0
-                else:
-                    sprite.speed = 1
+                sprite.speed = sprite.feet.colliderect(self.player.rect)
             if not isinstance(sprite, TiledEntity):
                 if sprite.feet.collidelist(self.get_walls()) > - 1:
                     sprite.move_back()
@@ -126,7 +123,7 @@ class MapManager:
                 
         
         # dessiner le groupe de calque
-        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=2)
+        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
         for b in AnimatedTile:
             group.add(b)
         group.add(self.player)

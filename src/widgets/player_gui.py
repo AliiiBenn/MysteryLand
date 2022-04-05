@@ -5,7 +5,7 @@ class PlayerGui:
         self.screen = screen
         self.player = player
         self.fulllife_heart = self.load_image("fulllife_heart", 45, 45)
-        self.nolife_heart = self.load_image("nolife_heart", 45)
+        self.nolife_heart = self.load_image("nolife_heart", 45, 45)
         
     def load_image(self, image, width=None, height=None):
         image = py.image.load(f"img/{image}.png")
