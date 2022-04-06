@@ -277,10 +277,10 @@ class Game:
                     self.quit_game()
                     running = False
                 
-                
             
             py.display.flip()
             for event in py.event.get():
+                
                 if event.type == py.QUIT:
                     if self.playing:
                         self.quit_game()

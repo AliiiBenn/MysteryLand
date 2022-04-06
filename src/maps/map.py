@@ -123,7 +123,7 @@ class MapManager:
                 
         
         # dessiner le groupe de calque
-        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
+        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=8)
         for b in AnimatedTile:
             group.add(b)
         group.add(self.player)
