@@ -1,1 +1,0 @@
-from .tiled_entity import TiledEntity
