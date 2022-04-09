@@ -9,16 +9,8 @@ class Checkpoint:
     height : int
     name : str
 
-# class Checkpoint:
-#     def __init__(self, x : int, y : int, width : int, height : int, name : str):
-#         self.x = x
-#         self.y = y
-#         self.width = width
-#         self.height = height
-#         self.name = name
-        
 class Checkpoints:
-    def get_checkpoints(tmx_data) -> list[Checkpoint]:
+    def get_checkpoints(tmx_data):
         checkpoints_list = []
         for obj in tmx_data.objects:
             if not obj.name is None and "checkpoint" in obj.name:
