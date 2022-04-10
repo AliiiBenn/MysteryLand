@@ -18,12 +18,12 @@ class Portal:
 @dataclass
 class Map:
     name : str
-    walls : list[py.Rect]
+    walls : list
     group : pyscroll.PyscrollGroup
     tmx_data : pytmx.TiledMap
-    portals : list[Portal]
-    npcs : list[Basicnpc]
-    shops : list[ShopNPC]
+    portals : list
+    npcs : list
+    shops : list
 
 class MapManager:
     def __init__(self, screen: int, player : str, ennemies_list):
