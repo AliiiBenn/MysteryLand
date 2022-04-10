@@ -2,10 +2,10 @@
     "player": {
         "new_game": false,
         "position": [
-            596,
-            2940
+            2707,
+            2053
         ],
-        "life": 60,
+        "life": 40,
         "current_world": "World_Alpha",
         "database_data": {
             "dungeons": 0,
