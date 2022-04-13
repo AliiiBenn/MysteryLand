@@ -1,4 +1,6 @@
 import pygame as py
+
+from entities.npc import Basicnpc
 from .entity import Entity
 from database_management.json_management import JsonManagement as JM
 from database_management.database_link import DatabaseLink
@@ -80,6 +82,7 @@ class Player(Entity):
                     1 si vivant, life > 0
         """
         return self.life <= 0
+
     
 class PlayerInformation(DatabaseLink):
     def __init__(self):

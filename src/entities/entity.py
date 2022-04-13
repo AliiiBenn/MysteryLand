@@ -5,7 +5,7 @@ import pygame as py
 class Animation(py.sprite.Sprite):
     def __init__(self, sprite : str):
         super().__init__()
-        self.sprite_sheet = py.image.load(f"img/{sprite}_16x16.png")
+        self.sprite_sheet = py.image.load(f"img/Entities/{sprite}_16x16.png")
         self.animation_index = 0
         self.clock = 0
         self.animation_speed = 2
@@ -91,7 +91,7 @@ class Entity(Animation):
         self.old_position = self.position.copy()
         self.moving = False
         self.direction = 0
-        self.speed = 2
+        self.speed = 6
         
     def update(self) -> None:
         """Met à jour la page

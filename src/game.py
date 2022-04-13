@@ -149,9 +149,9 @@ class Game:
             if not self.playing:
                 self.menu.creer((0, 0, 255))
                 if self.menu.check_state('play'):
+                    
                     self.initialise_game()
                     self.playing = True
-                # self.playing = self.menu.check_state('play')
                 self.open_menu = not self.menu.check_state('play')
             else:
                 self.menu.creer((0, 0, 255), True)
@@ -241,7 +241,6 @@ class Game:
             
             
             if self.playing:
-                
                 self.player.save_location()
                 self.handle_input()
                 self.update()

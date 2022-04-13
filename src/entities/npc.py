@@ -1,3 +1,4 @@
+import math
 import pygame as py
 from .entity import Entity
 
@@ -20,6 +21,20 @@ class Basicnpc(NPC):
         self.name = sprite
         self.current_point = 0
         
+    def animate_npc(self, old_position, npc_rect, target_rect):
+        if old_position[0] < self.position[0] and abs(target_rect.x - npc_rect.x) > target_rect.y - npc_rect.y:
+            self.moving, self.direction = True, 0
+            self.change_animation('walk_right')
+        if old_position[0] > self.position[0] and abs(target_rect.x - npc_rect.x) > target_rect.y - npc_rect.y:
+            self.moving, self.direction = True, 2
+            self.change_animation('walk_left')
+        if old_position[1] < self.position[1] and abs(target_rect.x - npc_rect.x) < target_rect.y - npc_rect.y:
+            self.moving, self.direction = True, 3
+            self.change_animation('walk_down')
+        if old_position[1] > self.position[1] and abs(target_rect.x - npc_rect.x) < target_rect.y - npc_rect.y:
+            self.moving, self.direction = True, 1
+            self.change_animation('walk_up')
+        
         
     def move(self) -> None:
         """Définie la trajectoire des NPCS basiques
@@ -40,14 +55,13 @@ class Basicnpc(NPC):
         current_rect = self.points[current_point]
         target_rect = self.points[target_point]
         
-        if current_rect.y < target_rect.y and abs(current_rect.x - target_rect.x) < 3:
-            self.move_down()
-        elif current_rect.y > target_rect.y and abs(current_rect.x - target_rect.x) < 3:
-            self.move_up()
-        elif current_rect.x > target_rect.x and abs(current_rect.y - target_rect.y) < 3:
-            self.move_left()
-        elif current_rect.x < target_rect.x and abs(current_rect.y - target_rect.y) < 3:
-            self.move_right()
+        dx, dy = target_rect.x - self.position[0], target_rect.y - self.position[1]
+        dist = math.hypot(dx, dy)
+        dx, dy = dx / dist, dy / dist
+        old_position = [self.position[0], self.position[1]]
+        self.position[0] += dx * (self.speed / 1.3)
+        self.position[1] += dy * (self.speed / 1.3)
+        self.animate_npc(old_position, self.rect, target_rect)
             
         if self.rect.colliderect(target_rect):
             self.current_point = target_point

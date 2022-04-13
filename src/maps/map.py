@@ -33,7 +33,9 @@ class MapManager:
         self.maps = dict()
         self.current_map = JM.get_specific_information('["player"]["current_world"]')
         
-        self.register_map("World_Alpha")
+        self.register_map("World_Alpha", npcs=[
+            Basicnpc("Amelia", nb_points=16)
+        ])
         
         if self.current_map == "World_Alpha":
             self.player.position[0], self.player.position[1] = Player.get_position()
@@ -70,7 +72,12 @@ class MapManager:
                     
         for sprite in self.get_group().sprites():
             if type(sprite) is Basicnpc:
-                sprite.speed = sprite.feet.colliderect(self.player.rect)
+                if sprite.feet.colliderect(self.player.rect):
+                    sprite.speed = 0
+                    sprite.moving = False
+                else:
+                    sprite.speed = 1
+                    sprite.moving = True
             if not isinstance(sprite, TiledEntity):
                 if sprite.feet.collidelist(self.get_walls()) > - 1:
                     sprite.move_back()
