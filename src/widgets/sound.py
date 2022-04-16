@@ -1,17 +1,25 @@
 import pygame as py
 
-class Sound:
+class Son:
+    def __init__(self):
+        py.mixer.init()
+        self.son = ""
+
+    def finDuJeu(self):
+        py.mixer.quit()
+
+
+    def chercherSonCorrespondant(self):
+        self.son = ""
+
+class SonJoueur(Son):
     def __init__(self):
         pass
 
-class SoundPlayer(Sound):
-    def __init__(self):
-        pass
-
-class SoundNPC(Sound):
+class SonPNJ(Son):
     def __init__(self, nomNpc):
         self.name = nomNpc
 
-class SoundGlobal(Sound):
+class SonGlobal(Son):
     def __init__(self):
         pass
