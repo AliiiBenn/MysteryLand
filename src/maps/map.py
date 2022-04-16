@@ -230,7 +230,7 @@ class MapManager:
         self.get_group().center(self.player.rect.center)
         
     def change_map(self) -> None:
-        """Change la map
+        """Change le Json de la map
 
         Args:
             La fonction ne prends aucun argument --> None

@@ -1,16 +1,18 @@
 import pygame as py
 
+musiques = []
+
+
 class Son:
-    def __init__(self):
+    def __init__(self, nomDuFichier):
         py.mixer.init()
-        self.son = ""
+        self.son = py.mixer.Sound(nomDuFichier)
 
     def finDuJeu(self):
         py.mixer.quit()
 
-
-    def chercherSonCorrespondant(self):
-        self.son = ""
+    def stopSon(self):
+        pass
 
 class SonJoueur(Son):
     def __init__(self):
