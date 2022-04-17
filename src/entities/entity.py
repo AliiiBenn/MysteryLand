@@ -91,7 +91,7 @@ class Entity(Animation):
         self.old_position = self.position.copy()
         self.moving = False
         self.direction = 0
-        self.speed = 6
+        self.speed = 2
         
     def update(self) -> None:
         """Met à jour la page
