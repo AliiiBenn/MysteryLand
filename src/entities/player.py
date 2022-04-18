@@ -9,7 +9,7 @@ class Player(Entity):
     def __init__(self, x, y, life):
         super().__init__(x, y, "Adam")
         self.life = self.get_life()
-        if self.life == None or self.life == 0:
+        if self.life is None or self.life == 0:
             self.change_player_life(life)
         
     @staticmethod
@@ -78,7 +78,7 @@ class Player(Entity):
             La fonction ne prends aucun argument
 
         Returns:
-            _type_: 0 si mort, life <= 0
+            bool: 0 si mort, life <= 0
                     1 si vivant, life > 0
         """
         return self.life <= 0

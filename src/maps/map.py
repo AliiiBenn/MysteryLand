@@ -39,14 +39,15 @@ class MapManager:
         self.points_list = [[[132, 22], [186, 123]], [[90, 144], [225, 88]], [[233, 168], [118, 30]],
                             [[188, 132], [234, 13]], [[164, 229], [92, 19]], [[195, 95], [133, 237]],
                             [[131, 22], [106, 113]], [[183, 148], [118, 98]], [[129, 144], [223, 153]]]
+        self.dialogs_list = ["Hello, I'm Amelia, the shop owner. I'm here to sell you some stuff.",
+                            "Hello, I'm Ash, the truc owner. I'm here to sell you some stuff."]
         self.path_list = []
 
-        for name, pos in zip(self.inhabitants_list, self.points_list):
-            print(pos[0],pos[1])
+
 
         
         self.register_map("World_Alpha", npcs=[
-            Basicnpc(name, self.path_length(pos[0], pos[1])) for name, pos in zip(self.inhabitants_list, self.points_list)
+            Basicnpc(name, self.path_length(pos[0], pos[1]), [dialog])for name, pos, dialog in zip(self.inhabitants_list, self.points_list, self.dialogs_list)
         ])
 
         
@@ -68,10 +69,11 @@ class MapManager:
         
         
             
-    # def check_npc_collisions(self, dialog_box):
-    #     for sprite in self.get_group().sprites():
-    #         if sprite.feet.colliderect(self.player.rect) and type(sprite) is NPC:
-    #             dialog_box.execute(sprite.dialog)
+    def check_npc_collisions(self, dialog_box):
+        for sprite in self.get_group().sprites():
+            if sprite.feet.colliderect(self.player.rect) and type(sprite) is Basicnpc:
+                print(sprite.dialog_list)
+                dialog_box.execute(sprite.dialog_list)
         
     def check_collisions(self) -> None:
         """Vérifie si il ya collision ou non 
@@ -265,12 +267,11 @@ class MapManager:
         #         AnimatedTile.append(TiledEntity(obj.x, obj.y, obj.name, obj.width, obj.height, 4, 5))
         
         # dessiner le groupe de calque
-        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=11)
+        group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=12)
         for b in AnimatedTile:
             group.add(b)
         group.add(self.player)
         group.add(self.ennemies_list)
-        group.add(npc for npc in npcs)
         
         
         for npc in npcs:
@@ -289,7 +290,7 @@ class MapManager:
         Returns:
             dict: le zomm de la map
         """
-        self.map_layer.zoom = 5.6 - ((width + height) / 720)
+        self.map_layer.zoom = round(5.6 - ((width + height) / 720), 1)
         return self.map_layer
     
         

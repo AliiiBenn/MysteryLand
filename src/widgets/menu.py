@@ -8,8 +8,7 @@ class Menu:
     def __init__(self, screen):
         self.boutons = []
         self.screen = screen
-        self.tmx_data = pytmx.util_pygame.load_pygame(f'Maps/menu_option.tmx')
-        self.quit_option = self.mouse_collide_rect(self.tmx_data)
+        self.tmx_data = pytmx.util_pygame.load_pygame(f'Maps/game_menu.tmx')
     
     def creer(self, color, in_game=False):
         """Méthode qui créée le menu
@@ -22,7 +21,19 @@ class Menu:
             La fonction ne retourne rien --> None
         """
         if not in_game:
-            self.screen.fill(color)
+            background_image = py.image.load('img/background_menu.png')
+            background_image = py.transform.scale(background_image, (self.screen.get_width(), self.screen.get_height()))
+            self.screen.blit(background_image, (0, 0))
+        # map_data = pyscroll.data.TiledMapData(self.tmx_data)
+        # self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
+        # self.map_layer.zoom = 2
+        
+        # self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)
+        # self.group.draw(self.screen)
+        
+        # self.group.update()
+        
+        
         for index, bouton in enumerate(['play', 'option', 'exit']):
             bouton = Button(self.screen.get_width() / 2, self.screen.get_height() / 2 + ((index - 1) * 150), 180, 88, f'{bouton}_button')
             self.boutons.append(bouton)

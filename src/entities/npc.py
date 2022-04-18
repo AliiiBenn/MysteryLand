@@ -14,9 +14,10 @@ class Specialnpc(NPC):
         
 # TODO : Régler le problème de collisions quand la speed est à 1 (déjà vu chez la conference woman).        
 class Basicnpc(NPC):
-    def __init__(self, sprite : str, nb_points : int) -> None:
+    def __init__(self, sprite : str, nb_points : int, dialog_list : list[str]) -> None:
         super().__init__(0, 0, sprite)
         self.nb_points = nb_points
+        self.dialog_list = dialog_list
         self.coordinates_list = []
         self.points = []
         self.speed = 1
@@ -66,7 +67,6 @@ class Basicnpc(NPC):
         current_rect = self.points[current_point]
         target_rect = self.points[target_point]
         
-        print(self.name, current_point, target_point)
         
         dx, dy = (target_rect.x + (target_rect.width / 2) - self.rect.centerx , target_rect.y + (target_rect.height / 2) - self.rect.centery)
         dist = math.hypot(dx, dy)
