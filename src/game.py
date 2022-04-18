@@ -11,7 +11,7 @@ from maps import Checkpoints
 from objects import QuestsSystem
 
 CLOCK = py.time.Clock()
-FPS = 60
+FPS = 480
 
 class NewGame:
     def __init__(self):
@@ -249,8 +249,7 @@ class Game:
                 
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
-                
-
+            
                 
                 self.quests_system.create_new_quests("Tuer 30 monstres", (100, 100), 40, True)
                 self.quests_system.create_new_quests("Aller au donjon", (100, 100), 40, True)
