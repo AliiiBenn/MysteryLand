@@ -252,7 +252,7 @@ class Game:
                 self.map_manager.draw()
                 self.dialog_box.render(self.screen)
                 self.ennemy.is_entity_visible(self.player)
-                
+                                
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
 

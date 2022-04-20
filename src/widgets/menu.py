@@ -25,7 +25,7 @@ class Menu:
             background_image = py.transform.scale(background_image, (self.screen.get_width(), self.screen.get_height()))
             self.screen.blit(background_image, (0, 0))
         # map_data = pyscroll.data.TiledMapData(self.tmx_data)
-        # self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
+        # self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size(), alpha=True, colorkey="(255, 0, 0)")
         # self.map_layer.zoom = 2
         
         # self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=5)

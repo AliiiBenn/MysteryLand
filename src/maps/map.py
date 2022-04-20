@@ -240,7 +240,7 @@ class MapManager:
         # charger la carte (tmx)
         tmx_data = pytmx.util_pygame.load_pygame(f'Maps/{name}.tmx')
         map_data = pyscroll.data.TiledMapData(tmx_data)
-        self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
+        self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size(), alpha=True)
         self.change_zoom(self.screen.get_width(), self.screen.get_height())
         
         
