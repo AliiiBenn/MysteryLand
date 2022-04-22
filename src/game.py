@@ -1,4 +1,3 @@
-import inspect
 import pygame as py
 import requests
 import pygame_widgets
@@ -6,9 +5,10 @@ from entities.enemies import Enemies
 from entities.player import Player, PlayerInformation, NewPlayer
 from database_management.json_management import JsonManagement as JM
 from maps import MapManager
-from widgets import Menu, NewPlayerMenu, PlayerGui
+from widgets import Menu, NewPlayerMenu, PlayerGui, DialogBox
 from maps import Checkpoints
 from objects import QuestsSystem
+from animation import Introduction
 
 CLOCK = py.time.Clock()
 FPS = 60
@@ -27,6 +27,8 @@ class Game:
         self.new_player_menu = NewPlayerMenu(self.screen, self)
         self.quests_system = QuestsSystem(self.screen)
         self.menu = Menu(self.screen)
+        self.dialog_box = DialogBox()
+        
         
         
         self.playing = False
@@ -76,6 +78,8 @@ class Game:
         self.player_gui = PlayerGui(self.screen, self.player)
         self.ennemy = Enemies(100, 100, 'Amelia', 0.3, self.screen)
         self.map_manager = MapManager(self.screen, self.player, self.ennemy)
+        self.introduction = Introduction(self.player, self.screen)
+        self.introduction.teleport_player([1712, 2128])
         
     def is_new_game(self) -> bool:
         """Regarde si la partie est nouvelle
@@ -193,13 +197,13 @@ class Game:
         """
         pressed = py.key.get_pressed()
         
-        if self.playing:
+        if self.playing and not self.introduction.introduction:
             if pressed[py.K_z]:
                 if pressed[py.K_q]:
                     self.player.move_left("u")
                 elif pressed[py.K_d]:
                     self.player.move_right("u")
-                else :
+                else:
                     self.player.move_up()
             elif pressed[py.K_s]:
                 if pressed[py.K_q]:
@@ -241,16 +245,20 @@ class Game:
             
             
             if self.playing:
+                
                 self.player.save_location()
                 self.handle_input()
                 self.update()
                 self.map_manager.draw()
+                self.dialog_box.render(self.screen)
                 self.ennemy.is_entity_visible(self.player)
-                
+                                
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
-                
 
+                if self.introduction.introduction:
+                    self.introduction.run()
+            
                 
                 self.quests_system.create_new_quests("Tuer 30 monstres", (100, 100), 40, True)
                 self.quests_system.create_new_quests("Aller au donjon", (100, 100), 40, True)
@@ -284,10 +292,13 @@ class Game:
                     if self.playing:
                         self.quit_game()
                     running = False
-                    
                 elif event.type == py.VIDEORESIZE:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)
                     if self.playing:
                         self.map_manager.change_zoom(event.size[0], event.size[1])
+                elif event.type == py.KEYDOWN:
+                    if self.playing:
+                        self.map_manager.check_npc_collisions(self.dialog_box)
+
                         
         py.quit()

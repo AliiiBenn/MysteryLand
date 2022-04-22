@@ -91,7 +91,7 @@ class Entity(Animation):
         self.old_position = self.position.copy()
         self.moving = False
         self.direction = 0
-        self.speed = 6
+        self.speed = 2
         
     def update(self) -> None:
         """Met à jour la page
@@ -138,7 +138,8 @@ class Entity(Animation):
     Directions + gestion de la diagonale :
     ------------------------------------------
     '''
-    
+
+
     def move_up(self, diagonale = False) -> None:
         """Fonction qui permet le deplacement haut et diagonale haut (dans les deux directions)
 
@@ -151,7 +152,7 @@ class Entity(Animation):
         if diagonale :
             #self.change_animation("walk_up", True)
             self.position[1] -= self.speed #+ 0.45
-        else :
+        else:
             self.change_animation("walk_up")
             self.position[1] -= self.speed
         self.moving, self.direction = True, 1
