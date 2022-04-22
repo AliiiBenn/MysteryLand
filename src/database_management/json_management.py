@@ -23,8 +23,8 @@ class JsonManagement:
             filename (str): nom du fichier
             data (str): données
         """
-        with open(f'data/{filename}.json', 'w') as f:
-            json.dump(data, f, indent = 4)
+        with open(f'data/{filename}.json', 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent = 4, ensure_ascii=False)
             
     def get_specific_information(path : str) -> dict:
         """obtient des infos précises du fichier

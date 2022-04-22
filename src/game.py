@@ -7,7 +7,7 @@ from database_management.json_management import JsonManagement as JM
 from maps import MapManager
 from widgets import Menu, NewPlayerMenu, PlayerGui, DialogBox
 from maps import Checkpoints
-from objects import QuestsSystem
+from objects import QuestsSystem, PositionQuests
 from animation import Introduction
 
 CLOCK = py.time.Clock()
@@ -25,7 +25,7 @@ class Game:
         
         self.player_informations = PlayerInformation()
         self.new_player_menu = NewPlayerMenu(self.screen, self)
-        self.quests_system = QuestsSystem(self.screen)
+        
         self.menu = Menu(self.screen)
         self.dialog_box = DialogBox()
         
@@ -77,9 +77,12 @@ class Game:
         self.player = Player(0, 0, 100)
         self.player_gui = PlayerGui(self.screen, self.player)
         self.ennemy = Enemies(100, 100, 'Amelia', 0.3, self.screen)
+        self.quests_system = QuestsSystem(self.screen)
         self.map_manager = MapManager(self.screen, self.player, self.ennemy)
         self.introduction = Introduction(self.player, self.screen)
-        self.introduction.teleport_player([1712, 2128])
+        
+        if not JM.get_specific_information('["player"]["animations_finished"]["introduction"]'):
+            self.introduction.teleport_player([1712, 2128])
         
     def is_new_game(self) -> bool:
         """Regarde si la partie est nouvelle
@@ -171,7 +174,7 @@ class Game:
             La fonction ne retourne rien --> None
         """
         if self.playing:
-            self.player.change_player_position()
+            self.player.change_player_position(self.map_manager.current_map)
             self.player.change_player_life(self.player.life)
             if self.check_internet_connection:
                 self.database_update_quitting()
@@ -218,8 +221,6 @@ class Game:
                 self.player.right()
             elif pressed[py.K_e]:
                 self.player.life -= 10
-            elif pressed[py.K_f]:
-                self.open_quest_menu = True
             elif pressed[py.K_ESCAPE]:
                 if self.open_quest_menu:
                     self.open_quest_menu = False
@@ -239,6 +240,9 @@ class Game:
 
         """
         running = True
+        # library_pos_quest = PositionQuests(self.screen, 1063, 2077)
+        positions_quest_list = [PositionQuests(self.screen, 1063, 2077, "World_Alpha", "Aller devant la bibliotheque", 10, 
+                                PositionQuests(self.screen, 653, 435, "library", "Rentrer dans la bibliotheque", 10))]
         while running:
             CLOCK.tick(FPS)
             
@@ -252,22 +256,39 @@ class Game:
                 self.map_manager.draw()
                 self.dialog_box.render(self.screen)
                 self.ennemy.is_entity_visible(self.player)
-                                
+
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
+
 
                 if self.introduction.introduction:
                     self.introduction.run()
             
+                for pos_quest in positions_quest_list:
+                    if not pos_quest.complete:
+                        self.quests_system._add_quest_to_dict(pos_quest)
+                        pos_quest.update(self.map_manager.current_map, self.player)
+                    else:
+                        self.quests_system.remove_quest(pos_quest, json_export=True)
+                        if not pos_quest.complete_text_alpha <= 0:
+                            self.quests_system.complete_quest_text(pos_quest)
+                        else:
+                            if pos_quest.has_next_quest:
+                                positions_quest_list.append(pos_quest.next_quest)
+                                positions_quest_list.remove(pos_quest)
+                            else:
+                                positions_quest_list.remove(pos_quest)
+                        
+                # print(positions_quest_list)
+                        
                 
-                self.quests_system.create_new_quests("Tuer 30 monstres", (100, 100), 40, True)
-                self.quests_system.create_new_quests("Aller au donjon", (100, 100), 40, True)
+                
                     
                 self.player_gui.display_life()
                 if self.open_quest_menu:
                     self.player_gui.display_quest_menu()
-                    for index, quest in enumerate(self.quests_system.quests_dict):
-                        self.quests_system.display_quest(quest, self.screen.get_width() / 2 - 300, self.screen.get_height() / 3 + (index * 40))
+                    self.quests_system.display_quest_list(self.screen.get_width() / 2 - 300, self.screen.get_height() / 3)
+                    
 
                 if self.player.is_dead():
                     Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
@@ -296,9 +317,13 @@ class Game:
                     self.screen = py.display.set_mode(event.size, py.RESIZABLE)
                     if self.playing:
                         self.map_manager.change_zoom(event.size[0], event.size[1])
-                elif event.type == py.KEYDOWN:
-                    if self.playing:
-                        self.map_manager.check_npc_collisions(self.dialog_box)
 
+                elif event.type == py.KEYDOWN:
+                    if event.key == py.K_SPACE:
+                        if self.playing:
+                            self.map_manager.check_npc_collisions(self.dialog_box)
+                    elif event.key == py.K_f and not self.introduction.introduction:
+                        self.open_quest_menu = not self.open_quest_menu
+                
                         
         py.quit()

@@ -46,11 +46,33 @@ class MapManager:
 
 
         
-        self.register_map("World_Alpha", npcs=[
+        self.register_map("World_Alpha", portals=[
+            Portal(from_world="World_Alpha", origin_point="enter_library", target_world="library", teleport_point="spawn_library"),
+        ], npcs=[
             Basicnpc(name, self.path_length(pos[0], pos[1]), [dialog])for name, pos, dialog in zip(self.inhabitants_list, self.points_list, self.dialogs_list)
         ])
 
+        self.register_map("library", portals=[
+            Portal(from_world="library", origin_point="enter_world", target_world="World_Alpha", teleport_point="library_exit"),
+        ])
+
         
+        self.load_path()
+
+
+        self.player.position[0], self.player.position[1] = Player.get_position(self.current_map)
+        self.player.save_location()
+        if self.current_map == "World_Alpha":
+            self.teleport_npcs()
+        
+        
+            
+    def check_npc_collisions(self, dialog_box):
+        for sprite in self.get_group().sprites():
+            if sprite.feet.colliderect(self.player.rect) and type(sprite) is Basicnpc:
+                dialog_box.execute(sprite.dialog_list)
+
+    def load_path(self):
         count = 0
         for sprite in self.get_group().sprites():
             if isinstance(sprite, Basicnpc):
@@ -58,22 +80,6 @@ class MapManager:
                 sprite.set_path_coordinates(path)
                 self.path_list.append(path)
                 count += 1
-
-        
-        if self.current_map == "World_Alpha":
-            self.player.position[0], self.player.position[1] = Player.get_position()
-            self.player.save_location()  
-        else:
-            self.teleport_player('player')
-        self.teleport_npcs()
-        
-        
-            
-    def check_npc_collisions(self, dialog_box):
-        for sprite in self.get_group().sprites():
-            if sprite.feet.colliderect(self.player.rect) and type(sprite) is Basicnpc:
-                print(sprite.dialog_list)
-                dialog_box.execute(sprite.dialog_list)
         
     def check_collisions(self) -> None:
         """Vérifie si il ya collision ou non 
@@ -92,8 +98,12 @@ class MapManager:
                 if self.player.feet.colliderect(rect):
                     copy_portal = portal
                     self.current_map = portal.target_world
+                    if self.current_map == "World_Alpha":
+                        self.load_path()
+                        self.teleport_npcs()
                     self.change_map()
                     self.teleport_player(copy_portal.teleport_point)
+                    
                     
                     
         for sprite in self.get_group().sprites():
@@ -240,9 +250,8 @@ class MapManager:
         # charger la carte (tmx)
         tmx_data = pytmx.util_pygame.load_pygame(f'Maps/{name}.tmx')
         map_data = pyscroll.data.TiledMapData(tmx_data)
-        self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size(), alpha=True)
-        self.change_zoom(self.screen.get_width(), self.screen.get_height())
-        
+        self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
+        self.map_layer.zoom = self.change_zoom(self.screen.get_width(), self.screen.get_height())
         
         
         # definir une liste qui va stocker les rectangles de collisions
@@ -252,15 +261,15 @@ class MapManager:
         
         for layer in tmx_data.visible_layers:
             if isinstance(layer, pytmx.pytmx.TiledTileLayer):
-                    for tile in layer.tiles():
-                        if 'collisions' in layer.name:
-                            walls.append(py.Rect(tile[0] * tile[2].get_width(), tile[1] * tile[2].get_height(), tile[2].get_width(), tile[2].get_height()))
-                            try:
-                                self.map_collisions_list[tile[1]][tile[0]] = self.map_collisions_list[tile[1]][tile[0] + 1] = self.map_collisions_list[tile[1]][tile[0] - 1] = self.map_collisions_list[tile[1] + 1][tile[0]] = self.map_collisions_list[tile[1] - 1][tile[0]] = 1
-                            except IndexError:
-                                self.map_collisions_list[tile[1]][tile[0]] = 1
-                        if layer.name == "roads":
+                for tile in layer.tiles():
+                    if 'collisions' in layer.name:
+                        walls.append(py.Rect(tile[0] * tile[2].get_width(), tile[1] * tile[2].get_height(), tile[2].get_width(), tile[2].get_height()))
+                        try:
+                            self.map_collisions_list[tile[1]][tile[0]] = self.map_collisions_list[tile[1]][tile[0] + 1] = self.map_collisions_list[tile[1]][tile[0] - 1] = self.map_collisions_list[tile[1] + 1][tile[0]] = self.map_collisions_list[tile[1] - 1][tile[0]] = 1
+                        except IndexError:
                             self.map_collisions_list[tile[1]][tile[0]] = 1
+                    if layer.name == "roads":
+                        self.map_collisions_list[tile[1]][tile[0]] = 1
         
         # for obj in tmx_data.objects:
         #     if obj.type == "test":
@@ -268,10 +277,7 @@ class MapManager:
         
         # dessiner le groupe de calque
         group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=12)
-        for b in AnimatedTile:
-            group.add(b)
         group.add(self.player)
-        group.add(self.ennemies_list)
         
         
         for npc in npcs:
@@ -290,9 +296,8 @@ class MapManager:
         Returns:
             dict: le zomm de la map
         """
-        self.map_layer.zoom = round(5.6 - ((width + height) / 720), 1)
-        return self.map_layer
-    
+        # print(width, height, round(5.6 - ((width + height) / 720), 1))
+        return 2.8
         
     def get_map(self) -> dict:
         """Retourne la map actuelle

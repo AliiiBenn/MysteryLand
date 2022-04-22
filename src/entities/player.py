@@ -13,7 +13,7 @@ class Player(Entity):
             self.change_player_life(life)
         
     @staticmethod
-    def get_position():
+    def get_position(world):
         """Obtient la position du joueur
 
         Args:
@@ -23,10 +23,10 @@ class Player(Entity):
             _type_: position du joueur
         """
         f = JM.open_file("saves")
-        player_position = JM.get_specific_information('["player"]["position"]')
+        player_position = JM.get_specific_information(f'["player"]["position"]["{world}"]')
         return player_position
     
-    def change_player_position(self):
+    def change_player_position(self, world):
         """Change la position du joueur
 
         Args:
@@ -38,7 +38,7 @@ class Player(Entity):
         current_player_position = [self.rect.x, self.rect.y]
         player_p = JM.open_file("saves")
         
-        player_p["player"]["position"] = current_player_position
+        player_p["player"]["position"][world] = current_player_position
         
         JM.write_file('saves', player_p)
         
@@ -107,7 +107,7 @@ class PlayerInformation(DatabaseLink):
                 'nickname' : user_name,
                 'dungeons' : dungeons,
                 'money' : money,
-                'level' : [level, xp]
+                'level' : [level, xp],
             }
         })
         
@@ -142,6 +142,13 @@ class NewPlayer:
             "position" : [0, 0],
             "life" : 100,
             "current_world" : "World_Alpha",
+            "position": {
+                "World_Alpha" : [1500, 1500],
+                "library" : [0, 0],
+            },
+            "animations_finished": {
+                "introduction": True
+            },
             "database_data" : {
                 "dungeons" : 0,
                 "nickname" : nickname,
