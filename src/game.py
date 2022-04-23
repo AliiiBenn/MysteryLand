@@ -8,14 +8,10 @@ from maps import MapManager
 from widgets import Menu, NewPlayerMenu, PlayerGui, DialogBox
 from maps import Checkpoints
 from objects import QuestsSystem, PositionQuests
-from animation import Introduction
+from animation import Introduction, VolLivreAnimation, KidnappingAnimation
 
 CLOCK = py.time.Clock()
 FPS = 60
-
-class NewGame:
-    def __init__(self):
-        pass
 
 class Game:
     def __init__(self, screen_width: int, screen_height: int):
@@ -28,6 +24,14 @@ class Game:
         
         self.menu = Menu(self.screen)
         self.dialog_box = DialogBox()
+        self.end_game_box_size = 0
+        self.end_game_text = [
+            "A suivre...",
+            "Vous avez fini MysteryLand !",
+            "Ce projet a été réalisé par David, Yanis et Jules",
+            "Pour le projet de fin d'année de Terminale 2022",
+            "En esperant que vous avez aimé le jeu !"
+        ]
         
         
         
@@ -80,7 +84,8 @@ class Game:
         self.quests_system = QuestsSystem(self.screen)
         self.map_manager = MapManager(self.screen, self.player, self.ennemy)
         self.introduction = Introduction(self.player, self.screen)
-        
+        self.vol_livre_animation = VolLivreAnimation(self.screen, self.player, self.map_manager)
+        self.kidnapping_animation = KidnappingAnimation(self.player, self.map_manager, self.screen)
         if not JM.get_specific_information('["player"]["animations_finished"]["introduction"]'):
             self.introduction.teleport_player([1712, 2128])
         
@@ -178,6 +183,18 @@ class Game:
             self.player.change_player_life(self.player.life)
             if self.check_internet_connection:
                 self.database_update_quitting()
+            
+    def end_game(self):
+        py.draw.rect(self.screen, (0, 0, 0), (0, 0, self.screen.get_width(), self.end_game_box_size))
+        if not self.end_game_box_size >= self.screen.get_height():
+            self.end_game_box_size += 2.5
+        else:
+            for index, text in enumerate(self.end_game_text):
+                font = py.font.SysFont("comicsansms", 25)
+                label = font.render(text, 1, (255, 255, 255))
+                self.screen.blit(label, (self.screen.get_width() // 2 - font.size(text)[0] // 2, (self.screen.get_height() // 2 + index * 50) - 200))
+       
+        
                 
     def create_new_player(self):
         # on lance la fonction directement dans le widget
@@ -242,7 +259,11 @@ class Game:
         running = True
         # library_pos_quest = PositionQuests(self.screen, 1063, 2077)
         positions_quest_list = [PositionQuests(self.screen, 1063, 2077, "World_Alpha", "Aller devant la bibliotheque", 10, 
-                                PositionQuests(self.screen, 653, 435, "library", "Rentrer dans la bibliotheque", 10))]
+                                PositionQuests(self.screen, 653, 435, "library", "Rentrer dans la bibliotheque", 10, 
+                                PositionQuests(self.screen, 768, 192, "library", "Prendre le livre", 10,
+                                PositionQuests(self.screen, 2571, 2884, "World_Alpha", "Recuperer votre livre", 10))))]
+        start_thief_animation = False
+        start_kidnapping_animation = False
         while running:
             CLOCK.tick(FPS)
             
@@ -263,15 +284,23 @@ class Game:
 
                 if self.introduction.introduction:
                     self.introduction.run()
+                else:
+                    if not self.player_gui.keys_text_displayed:
+                        self.player_gui.keys_help_text()
             
                 for pos_quest in positions_quest_list:
+                    if pos_quest.description == "Prendre le livre" and pos_quest.complete:
+                        start_thief_animation = True
+                    elif pos_quest.description == "Recuperer votre livre" and pos_quest.complete:
+                        start_kidnapping_animation = True
                     if not pos_quest.complete:
                         self.quests_system._add_quest_to_dict(pos_quest)
                         pos_quest.update(self.map_manager.current_map, self.player)
+                        self.quests_system.create_distance_text(self.player, pos_quest, self.screen.get_width() - 45, self.screen.get_height() - 40)
                     else:
                         self.quests_system.remove_quest(pos_quest, json_export=True)
                         if not pos_quest.complete_text_alpha <= 0:
-                            self.quests_system.complete_quest_text(pos_quest)
+                            self.quests_system.display_quest_text("Quête accomplie !", pos_quest)
                         else:
                             if pos_quest.has_next_quest:
                                 positions_quest_list.append(pos_quest.next_quest)
@@ -293,7 +322,17 @@ class Game:
                 if self.player.is_dead():
                     Checkpoints.teleport_to_checkpoints(self.player, checkpoints)
                     self.player.life = 100
-            
+
+                if not self.vol_livre_animation.animation_complete and start_thief_animation:
+                    self.vol_livre_animation.create_screen_border(self.screen.get_width(), self.screen.get_height())
+                    self.vol_livre_animation.move_thief(self.map_manager.voleur_library)
+
+                if not self.kidnapping_animation.animation_complete and start_kidnapping_animation:
+                    self.kidnapping_animation.run()
+
+                if self.kidnapping_animation.animation_complete:
+                    self.end_game()
+
             elif self.is_new_game():
                 self.new_player_menu.create()
                 pygame_widgets.update(py.event.get())
@@ -304,6 +343,9 @@ class Game:
                 if self.menu.check_state('exit'):
                     self.quit_game()
                     running = False
+
+
+            
                 
             
             py.display.flip()

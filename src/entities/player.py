@@ -139,6 +139,7 @@ class NewPlayer:
         player = JM.open_file('saves')
         
         player["player"].update({
+            "keys_text_displayed" : False,
             "position" : [0, 0],
             "life" : 100,
             "current_world" : "World_Alpha",
@@ -147,7 +148,9 @@ class NewPlayer:
                 "library" : [0, 0],
             },
             "animations_finished": {
-                "introduction": True
+                "introduction": False,
+                "thief" : False,
+                "kidnapping" : False
             },
             "database_data" : {
                 "dungeons" : 0,

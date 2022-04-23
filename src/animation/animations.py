@@ -13,6 +13,9 @@ class Animations:
         self.dialog_box = DialogBox()
         self.text_box_count = 0
         self.dialog_finished = False
+        self.border_position = 0
+        self.border_count = 0
+        self.border_complete = False
 
     def teleport_player(self, destination : list[int]) -> None:
         """Méthode permettant de téléporter le joueur à une position donnée pour lancer l'animation
@@ -35,7 +38,20 @@ class Animations:
         
         if self.dialog_box.text_index >= len(dialog_list):
             self.dialog_finished = True
-            return
+            return True
+
+    def create_screen_border(self, width, height):
+        if not self.border_complete:
+            self.border_count += 1
+            BORDER_SIZE = height // 6
+            if not self.border_position >= BORDER_SIZE and self.border_count <= 100:
+                self.border_position += 1.5
+            if self.border_count >= 100:
+                self.border_position -= 1.5
+                if self.border_position <= 0:
+                    self.border_complete = True
+            py.draw.rect(self.screen, (0, 0, 0), (0, 0 - BORDER_SIZE + self.border_position, width, BORDER_SIZE))
+            py.draw.rect(self.screen, (0, 0, 0), (0, (height - self.border_position) , width, BORDER_SIZE))
         
 
     def screen_animation(self, screen):

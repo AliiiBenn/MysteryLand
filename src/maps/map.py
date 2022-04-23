@@ -4,7 +4,7 @@ import pytmx, pyscroll
 
 from objects.tiled_entity import TiledEntity
 from entities.player import Player
-from entities.npc import Basicnpc, ShopNPC
+from entities.npc import Basicnpc, ShopNPC, Voleur
 from database_management import JsonManagement as JM
 
 
@@ -39,8 +39,9 @@ class MapManager:
         self.points_list = [[[132, 22], [186, 123]], [[90, 144], [225, 88]], [[233, 168], [118, 30]],
                             [[188, 132], [234, 13]], [[164, 229], [92, 19]], [[195, 95], [133, 237]],
                             [[131, 22], [106, 113]], [[183, 148], [118, 98]], [[129, 144], [223, 153]]]
-        self.dialogs_list = ["Hello, I'm Amelia, the shop owner. I'm here to sell you some stuff.",
-                            "Hello, I'm Ash, the truc owner. I'm here to sell you some stuff."]
+        self.dialogs_list = []
+        for name in self.inhabitants_list:
+            self.dialogs_list.extend([f"Salut je suis {name}", "comment vas-tu ?"])
         self.path_list = []
 
 
@@ -274,10 +275,18 @@ class MapManager:
         # for obj in tmx_data.objects:
         #     if obj.type == "test":
         #         AnimatedTile.append(TiledEntity(obj.x, obj.y, obj.name, obj.width, obj.height, 4, 5))
-        
+    
+
         # dessiner le groupe de calque
         group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=12)
+        if name == 'library':
+            self.voleur_library = Voleur(478, 233, "Bruce")
+            group.add(self.voleur_library)
+        elif name == 'World_Alpha':
+            self.voleur_world = Voleur(2464, 2940, "Bruce")
+            group.add(self.voleur_world)
         group.add(self.player)
+
         
         
         for npc in npcs:

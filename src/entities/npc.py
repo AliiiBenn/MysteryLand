@@ -11,6 +11,10 @@ class NPC(Entity):
 class Specialnpc(NPC):
     def __init__(self, x : int, y : int, sprite : str) -> None:
         super().__init__(x, y, sprite)
+
+class Voleur(NPC):
+    def __init__(self, x : int, y : int, sprite : str) -> None:
+        super().__init__(x, y, sprite)
         
 # TODO : Régler le problème de collisions quand la speed est à 1 (déjà vu chez la conference woman).        
 class Basicnpc(NPC):

@@ -5,7 +5,7 @@ from database_management import JsonManagement as JM
 class QuestsSystem:
     def __init__(self, screen):
         self.screen = screen
-        self.quests_dict = JM.get_specific_information('["player"]["database_data"]["quests"]')
+        self.quests_dict = {}
         self.quests_list = []
         self.quest_text_x, self.quest_text_y = self.screen.get_width() // 2, self.screen.get_height() // 2
         
@@ -53,16 +53,17 @@ class QuestsSystem:
             return int(abs(player.rect.x - quest.x) / 32 + abs(player.rect.y - quest.y) / 32)
         return abs(player.rect.x - quest.x) + abs(player.rect.y - quest.y)
 
-    def create_distance_text(self, distance, x, y, meters=True):
+    def create_distance_text(self, player, quest, x, y):
+        distance = self.distance_from_quest(player, quest)
         font = py.font.SysFont("comicsansms", 25)
-        label = font.render(f"{distance}{'m' if meters else 'px'}", 1, (255, 255, 255))
+        label = font.render(f"{distance}m", 1, (255, 255, 255))
         self.quests_list.append(label)
         return self.screen.blit(label, (x, y))
 
-    def complete_quest_text(self, quest):
+    def display_quest_text(self, text, quest):
         quest.complete_text_alpha -= 2
         font = py.font.SysFont("comicsansms", 25)
-        render_text_list = ["Quête accomplie", quest.description]
+        render_text_list = [text, quest.description]
         for index, text in enumerate(render_text_list):
             text_size = font.size(text)
             label = font.render(text, 1, (0, 0, 0))
