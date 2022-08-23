@@ -1,5 +1,33 @@
 {
     "player": {
-        "new_game": true
+        "new_game": false,
+        "keys_text_displayed": false,
+        "position": {
+            "World_Alpha": [
+                1500,
+                1500
+            ],
+            "library": [
+                0,
+                0
+            ]
+        },
+        "life": 100,
+        "current_world": "World_Alpha",
+        "animations_finished": {
+            "introduction": false,
+            "thief": false,
+            "kidnapping": false
+        },
+        "database_data": {
+            "dungeons": 0,
+            "nickname": "AliBen",
+            "money": 0,
+            "level": [
+                0,
+                0
+            ],
+            "quests": {}
+        }
     }
 }

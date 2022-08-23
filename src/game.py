@@ -281,6 +281,7 @@ class Game:
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
 
+                print(self.player.x, self.player.y)
 
                 if self.introduction.introduction:
                     self.introduction.run()
