@@ -9,7 +9,7 @@ class Player(Entity):
     def __init__(self, x, y, life):
         super().__init__(x, y, "Adam")
         self.life = self.get_life()
-        if self.life is None or self.life == 0:
+        if not self.life:
             self.change_player_life(life)
         
     @staticmethod

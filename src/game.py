@@ -218,33 +218,13 @@ class Game:
         pressed = py.key.get_pressed()
         
         if self.playing and not self.introduction.introduction:
-            if pressed[py.K_z]:
-                if pressed[py.K_q]:
-                    self.player.move_left("u")
-                elif pressed[py.K_d]:
-                    self.player.move_right("u")
-                else:
-                    self.player.move_up()
-            elif pressed[py.K_s]:
-                if pressed[py.K_q]:
-                    self.player.move_left("d")
-                elif pressed[py.K_d]:
-                    self.player.move_right("d")
-                else :
-                    self.player.move_down()
-            elif pressed[py.K_q]:
-                self.player.left()
-            elif pressed[py.K_d]:
-                self.player.right()
-            elif pressed[py.K_e]:
+            if pressed[py.K_e]:
                 self.player.life -= 10
             elif pressed[py.K_ESCAPE]:
                 if self.open_quest_menu:
                     self.open_quest_menu = False
                 else:
                     self.open_menu = True
-            else:
-                self.player.moving = False
 
     def run(self) -> None:
         """Méthode principale qui lance le jeu
@@ -271,6 +251,9 @@ class Game:
             
             if self.playing:
                 
+                self.player.move()
+                # print(self.player.moving)
+                
                 self.player.save_location()
                 self.handle_input()
                 self.update()
@@ -281,7 +264,6 @@ class Game:
                 current_map = self.map_manager.get_map()
                 checkpoints = Checkpoints.get_checkpoints(current_map.tmx_data)
 
-                print(self.player.x, self.player.y)
 
                 if self.introduction.introduction:
                     self.introduction.run()

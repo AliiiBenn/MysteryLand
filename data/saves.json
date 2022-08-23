@@ -1,21 +1,21 @@
 {
     "player": {
         "new_game": false,
-        "keys_text_displayed": false,
+        "keys_text_displayed": true,
         "position": {
             "World_Alpha": [
-                1500,
-                1500
+                2835,
+                1615
             ],
             "library": [
                 0,
                 0
             ]
         },
-        "life": 100,
+        "life": 75.40000000000023,
         "current_world": "World_Alpha",
         "animations_finished": {
-            "introduction": false,
+            "introduction": true,
             "thief": false,
             "kidnapping": false
         },
@@ -27,7 +27,16 @@
                 0,
                 0
             ],
-            "quests": {}
+            "quests": {
+                "Aller devant la bibliotheque": {
+                    "Aller devant la bibliotheque": "Aller devant la bibliotheque",
+                    "position": [
+                        1063,
+                        2077
+                    ],
+                    "xp": 10
+                }
+            }
         }
     }
 }

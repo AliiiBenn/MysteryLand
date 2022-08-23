@@ -61,7 +61,7 @@ class MapManager:
         self.load_path()
 
 
-        self.player.position[0], self.player.position[1] = Player.get_position(self.current_map)
+        self.player.rect.x, self.player.rect.y = Player.get_position(self.current_map)
         self.player.save_location()
         if self.current_map == "World_Alpha":
             self.teleport_npcs()
