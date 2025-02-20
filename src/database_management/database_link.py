@@ -15,7 +15,7 @@ class DatabaseLink:
         Returns:
             _type_: base de donnée
         """
-        return firebase_admin.initialize_app(self.cred, {'databaseURL' : 'https://mysteryland-fb22d-default-rtdb.europe-west1.firebasedatabase.app/'})
+        return firebase_admin.initialize_app(self.cred, {'databaseURL' : ''})
     
     def create_child(self, child_name : str):
         """créer un child
